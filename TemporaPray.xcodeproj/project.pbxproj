@@ -1,0 +1,466 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7380B9232278879A00D5647E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380B9222278879A00D5647E /* AppDelegate.swift */; };
+		7380B9252278879A00D5647E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380B9242278879A00D5647E /* ViewController.swift */; };
+		7380B9282278879B00D5647E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7380B9262278879B00D5647E /* Main.storyboard */; };
+		7380B92A2278879F00D5647E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7380B9292278879F00D5647E /* Assets.xcassets */; };
+		7380B92D2278879F00D5647E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7380B92B2278879F00D5647E /* LaunchScreen.storyboard */; };
+		7380B9382278879F00D5647E /* TemporaPrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380B9372278879F00D5647E /* TemporaPrayTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7380B9342278879F00D5647E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7380B9172278879A00D5647E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7380B91E2278879A00D5647E;
+			remoteInfo = TemporaPray;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		7380B91F2278879A00D5647E /* TemporaPray.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TemporaPray.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7380B9222278879A00D5647E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7380B9242278879A00D5647E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		7380B9272278879B00D5647E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		7380B9292278879F00D5647E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7380B92C2278879F00D5647E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		7380B92E2278879F00D5647E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7380B9332278879F00D5647E /* TemporaPrayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TemporaPrayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7380B9372278879F00D5647E /* TemporaPrayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaPrayTests.swift; sourceTree = "<group>"; };
+		7380B9392278879F00D5647E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7380B91C2278879A00D5647E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7380B9302278879F00D5647E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7380B9162278879A00D5647E = {
+			isa = PBXGroup;
+			children = (
+				7380B9212278879A00D5647E /* TemporaPray */,
+				7380B9362278879F00D5647E /* TemporaPrayTests */,
+				7380B9202278879A00D5647E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7380B9202278879A00D5647E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7380B91F2278879A00D5647E /* TemporaPray.app */,
+				7380B9332278879F00D5647E /* TemporaPrayTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7380B9212278879A00D5647E /* TemporaPray */ = {
+			isa = PBXGroup;
+			children = (
+				7380B9222278879A00D5647E /* AppDelegate.swift */,
+				7380B9242278879A00D5647E /* ViewController.swift */,
+				7380B9262278879B00D5647E /* Main.storyboard */,
+				7380B9292278879F00D5647E /* Assets.xcassets */,
+				7380B92B2278879F00D5647E /* LaunchScreen.storyboard */,
+				7380B92E2278879F00D5647E /* Info.plist */,
+			);
+			path = TemporaPray;
+			sourceTree = "<group>";
+		};
+		7380B9362278879F00D5647E /* TemporaPrayTests */ = {
+			isa = PBXGroup;
+			children = (
+				7380B9372278879F00D5647E /* TemporaPrayTests.swift */,
+				7380B9392278879F00D5647E /* Info.plist */,
+			);
+			path = TemporaPrayTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7380B91E2278879A00D5647E /* TemporaPray */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7380B93C2278879F00D5647E /* Build configuration list for PBXNativeTarget "TemporaPray" */;
+			buildPhases = (
+				7380B91B2278879A00D5647E /* Sources */,
+				7380B91C2278879A00D5647E /* Frameworks */,
+				7380B91D2278879A00D5647E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TemporaPray;
+			productName = TemporaPray;
+			productReference = 7380B91F2278879A00D5647E /* TemporaPray.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7380B9322278879F00D5647E /* TemporaPrayTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7380B93F2278879F00D5647E /* Build configuration list for PBXNativeTarget "TemporaPrayTests" */;
+			buildPhases = (
+				7380B92F2278879F00D5647E /* Sources */,
+				7380B9302278879F00D5647E /* Frameworks */,
+				7380B9312278879F00D5647E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7380B9352278879F00D5647E /* PBXTargetDependency */,
+			);
+			name = TemporaPrayTests;
+			productName = TemporaPrayTests;
+			productReference = 7380B9332278879F00D5647E /* TemporaPrayTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7380B9172278879A00D5647E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1020;
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = Equulus;
+				TargetAttributes = {
+					7380B91E2278879A00D5647E = {
+						CreatedOnToolsVersion = 10.2.1;
+					};
+					7380B9322278879F00D5647E = {
+						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = 7380B91E2278879A00D5647E;
+					};
+				};
+			};
+			buildConfigurationList = 7380B91A2278879A00D5647E /* Build configuration list for PBXProject "TemporaPray" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7380B9162278879A00D5647E;
+			productRefGroup = 7380B9202278879A00D5647E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7380B91E2278879A00D5647E /* TemporaPray */,
+				7380B9322278879F00D5647E /* TemporaPrayTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7380B91D2278879A00D5647E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7380B92D2278879F00D5647E /* LaunchScreen.storyboard in Resources */,
+				7380B92A2278879F00D5647E /* Assets.xcassets in Resources */,
+				7380B9282278879B00D5647E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7380B9312278879F00D5647E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7380B91B2278879A00D5647E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7380B9252278879A00D5647E /* ViewController.swift in Sources */,
+				7380B9232278879A00D5647E /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7380B92F2278879F00D5647E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7380B9382278879F00D5647E /* TemporaPrayTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7380B9352278879F00D5647E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7380B91E2278879A00D5647E /* TemporaPray */;
+			targetProxy = 7380B9342278879F00D5647E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		7380B9262278879B00D5647E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7380B9272278879B00D5647E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		7380B92B2278879F00D5647E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7380B92C2278879F00D5647E /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		7380B93A2278879F00D5647E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		7380B93B2278879F00D5647E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7380B93D2278879F00D5647E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = TemporaPray/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexpoulos.TemporaPray;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7380B93E2278879F00D5647E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = TemporaPray/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexpoulos.TemporaPray;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7380B9402278879F00D5647E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = TemporaPrayTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexpoulos.TemporaPrayTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TemporaPray.app/TemporaPray";
+			};
+			name = Debug;
+		};
+		7380B9412278879F00D5647E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = TemporaPrayTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexpoulos.TemporaPrayTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TemporaPray.app/TemporaPray";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7380B91A2278879A00D5647E /* Build configuration list for PBXProject "TemporaPray" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7380B93A2278879F00D5647E /* Debug */,
+				7380B93B2278879F00D5647E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7380B93C2278879F00D5647E /* Build configuration list for PBXNativeTarget "TemporaPray" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7380B93D2278879F00D5647E /* Debug */,
+				7380B93E2278879F00D5647E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7380B93F2278879F00D5647E /* Build configuration list for PBXNativeTarget "TemporaPrayTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7380B9402278879F00D5647E /* Debug */,
+				7380B9412278879F00D5647E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7380B9172278879A00D5647E /* Project object */;
+}
