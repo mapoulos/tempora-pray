@@ -16,6 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // set the defaults
+        let defaults = UserDefaults()
+        let defaultsDictionary = [Preferences.SessionLength.rawValue: 900, Preferences.IntermittentBell.rawValue: 120, Preferences.TextID.rawValue: "evagrius.onprayer.1"] as [String: Any]
+        defaults.register(defaults: defaultsDictionary)
         return true
     }
 
