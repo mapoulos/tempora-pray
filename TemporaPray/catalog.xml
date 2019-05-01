@@ -1,0 +1,27 @@
+<tempora_catalog>
+    <author name="Evagrius Ponticus" uuid="32159dab2e2769e60525">
+			<work name="On Prayer" uuid="9e7c65468f795cbafd19">
+				<section name="1" uuid="de5e762e6432c9cd1572" audio="https://www.alexpoulos.com/audio/evagrius.onprayer.1.mp3">
+					If you wish to prepare a “fragrant offering,” you should combine in equal measure diaphanous frankincense, cassia, the aroma onyx, and myrrh, just as the law requires— these are the four virtues. For when these are perfected and present in equal measure, your mind will not be betrayed to the enemy.
+				</section>
+					<section name="2" uuid="4404765793fd78309673" audio="https://www.alexpoulos.com/audio/evagrius.onprayer.2.mp3">
+						A soul purified through the fullness of the virtues makes the rule of the mind in the body and soul secure, thereby making it receptive to the state it seeks.
+					</section>
+					<section name="3"  uuid="0cbc06040511f6ebe7f8" audio="https://www.alexpoulos.com/audio/evagrius.onprayer.3.mp3">
+						Prayer is the mind’s conversation with God. If the mind is going to be able to direct itself without distraction towards its Lord and converse with him directly, what state it must receive!
+					</section>
+
+			</work>
+		</author>
+
+		<author name="Brother Lawrence" uuid="1d233f1f09e4c3c232ff">
+			<work name="Spiritual Maxims" uuid="a4955a2f139c33040381">
+				<section name="1" uuid="2dcda76dc7f4da430ebd" audio="https://www.alexpoulos.com/audio/lawrence.maxims.1.mp3">
+					Lorem ipsem dolor sit
+				</section>
+				<section name="2" uuid="15eed77642e33a03cd6a" audio="https://www.alexpoulos.com/audio/lawrence.maxims.2.mp3">
+					Arma virumque cano Troiae qui primus ab oris
+				</section>
+			</work>
+		</author>
+</tempora_catalog>
