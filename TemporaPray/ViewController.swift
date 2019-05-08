@@ -7,33 +7,24 @@
 //
 
 import UIKit
-
+import os
 class ViewController: UIViewController {
     @IBOutlet var timerView: UIView!
     
     @IBOutlet weak var timerLabel: UILabel!
-    
+    let authorURL = "https://localhost:8080/authors"
     var meditationTimer: PausableTimer = PausableTimer()
     var authorCatalog: [Author] = Array()
     
-//    func test() {
-//    do {
-//    let manifestData = try Data(contentsOf: fromBundle.url(forResource: manifestName, withExtension: ext)!, options: .mappedIfSafe)
-//    let json = try? JSONSerialization.jsonObject(with: manifestData, options: [])
-//    if let dictionary = json as? [String: Any] {
-//    for (timerSoundName, timerSoundParams) in dictionary {
-//    if let paramsDictionary = timerSoundParams as? [String: String] {
-//    let filename = paramsDictionary["filename"]
-//    let filetype = paramsDictionary["filetype"]
-//    let attribution = paramsDictionary["attribution"]
-//    timerSoundsDictionary[timerSoundName] = TimerSound(name: timerSoundName, filename: filename!, filetype: filetype!, attribution: attribution!)
-//    }
-//    }
-//    }
-//    } catch {
-//    print("error occurred")
-//    }
-//    }
+    var currentAuthor: Author?
+    var currentWork: Work?
+    var currentSection: Section?
+    var soundLibrary: TimerSoundLibrary {
+        let soundBundle = Bundle(path: Bundle.main.path(forResource: "Sounds", ofType: "bundle")!)
+        TimerSoundLibrary.initialize(soundBundle: soundBundle!, manifestName: "manifest", withExtension: "json")
+        os_log("finished loading the sound library")
+        return TimerSoundLibrary.getInstance()!
+    }
     
     private var authorList: [Author] = Array()
     
@@ -45,6 +36,11 @@ class ViewController: UIViewController {
             do {
                 let response = try JSONDecoder().decode(WebResponse.self, from: data)
                 self.authorList = response.getAuthors()!
+                //by default select first author, first work, first section
+                self.currentAuthor = self.authorList.first
+                self.currentWork = self.currentAuthor?.works.first
+                self.currentSection = self.currentWork?.sections.first
+                os_log("Finished loading the authors' list from the web." )
             } catch {
                 print(error)
             }
@@ -55,19 +51,39 @@ class ViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        super.viewDidLoad()
         // Do any additional setup after loading the view.
-        loadAuthorCatalog(urlString: "https://localhost:8080/authors")
+        loadAuthorCatalog(urlString: authorURL)
+        
+        
+        
+        super.viewDidLoad()
+        
+        
     }
     
-    @IBAction func playButtonPressed(_ sender: Any?) {
+    
+    
+    @IBAction func playButtonPressed(_ sender: UIButton?) {
+        
+        func showPlayButton() {
+            //change the playButton icon
+            let playIcon = UIImage(named: "Play_icon")
+            sender!.setImage(playIcon, for: [])
+        }
+        
+        func showPauseButton() {
+            let pauseIcon = UIImage(named: "Pause_icon")
+            sender!.setImage(pauseIcon, for: [])
+        }
+        
         if(meditationTimer.started() == false) {
             let defaults = UserDefaults()
             let duration = defaults.double(forKey: Preferences.SessionLength.rawValue)
             meditationTimer.duration = duration
             meditationTimer.onEnd = {
-                //change the playButton icon
+               showPlayButton()
             }
+            
             
             
             meditationTimer.update = {
@@ -77,14 +93,30 @@ class ViewController: UIViewController {
                 let timeRemaining = self.meditationTimer.duration - self.meditationTimer.elapsedTime
                 self.timerLabel.text = formatter.string(from: timeRemaining)
             }
-            meditationTimer.start()
+            
+            //play the dong
+            
+            showPauseButton()
+            
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.soundLibrary["Ship Bell"]!.play()
+                
+            }
+            FileCache.shared().downloadFileFromURLAsync(urlString: currentSection!.audioURL)
+            self.meditationTimer.start()
+            
+            
+            
         } else {
             if(meditationTimer.isRunning == true) {
+                showPlayButton()
                 meditationTimer.pause()
             } else {
+                showPauseButton()
+    
                 meditationTimer.resume()
             }
-            //change button 
+            
         }
     }
 

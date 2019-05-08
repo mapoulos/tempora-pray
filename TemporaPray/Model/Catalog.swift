@@ -82,6 +82,8 @@ struct Work : Comparable, Codable {
     var name: String = ""
     var sections: [Section] = []
     var info: String  = ""
+    
+
 }
 
 struct Section : Comparable, Codable {

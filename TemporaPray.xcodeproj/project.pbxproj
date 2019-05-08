@@ -18,6 +18,8 @@
 		7380B94F227897F500D5647E /* TimerSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380B94D227897F500D5647E /* TimerSound.swift */; };
 		7380B950227897F500D5647E /* WorkSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380B94E227897F500D5647E /* WorkSession.swift */; };
 		7380B951227897F500D5647E /* PausableTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380B94C227897F500D5647E /* PausableTimer.swift */; };
+		73A846BE2283235F00598F76 /* Sounds.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 73A846BD2283235F00598F76 /* Sounds.bundle */; };
+		73A846C02283441F00598F76 /* FileCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A846BF2283441F00598F76 /* FileCache.swift */; };
 		73EB310B2279A9D200453AA0 /* Catalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73EB310A2279A9D200453AA0 /* Catalog.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +49,8 @@
 		7380B94C227897F500D5647E /* PausableTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PausableTimer.swift; sourceTree = "<group>"; };
 		7380B94D227897F500D5647E /* TimerSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSound.swift; sourceTree = "<group>"; };
 		7380B94E227897F500D5647E /* WorkSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSession.swift; sourceTree = "<group>"; };
+		73A846BD2283235F00598F76 /* Sounds.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Sounds.bundle; sourceTree = "<group>"; };
+		73A846BF2283441F00598F76 /* FileCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCache.swift; sourceTree = "<group>"; };
 		73EB310A2279A9D200453AA0 /* Catalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Catalog.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -97,6 +101,7 @@
 				7380B94D227897F500D5647E /* TimerSound.swift */,
 				7380B94E227897F500D5647E /* WorkSession.swift */,
 				7380B9262278879B00D5647E /* Main.storyboard */,
+				73A846BD2283235F00598F76 /* Sounds.bundle */,
 				7380B9292278879F00D5647E /* Assets.xcassets */,
 				7380B92B2278879F00D5647E /* LaunchScreen.storyboard */,
 				7380B92E2278879F00D5647E /* Info.plist */,
@@ -118,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				73EB310A2279A9D200453AA0 /* Catalog.swift */,
+				73A846BF2283441F00598F76 /* FileCache.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -204,6 +210,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7380B92D2278879F00D5647E /* LaunchScreen.storyboard in Resources */,
+				73A846BE2283235F00598F76 /* Sounds.bundle in Resources */,
 				7380B92A2278879F00D5647E /* Assets.xcassets in Resources */,
 				7380B9282278879B00D5647E /* Main.storyboard in Resources */,
 			);
@@ -227,6 +234,7 @@
 				7380B94F227897F500D5647E /* TimerSound.swift in Sources */,
 				7380B94B227896D100D5647E /* TimerController.swift in Sources */,
 				73EB310B2279A9D200453AA0 /* Catalog.swift in Sources */,
+				73A846C02283441F00598F76 /* FileCache.swift in Sources */,
 				7380B9232278879A00D5647E /* AppDelegate.swift in Sources */,
 				7380B951227897F500D5647E /* PausableTimer.swift in Sources */,
 				7380B949227894B200D5647E /* Preferences.swift in Sources */,

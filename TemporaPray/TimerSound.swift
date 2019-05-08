@@ -10,7 +10,9 @@
 import AVFoundation
 import UIKit
 
-class TimerSound {
+//protocol
+
+class TimerSound  {
     // https://freesound.org/people/juskiddink/sounds/122647/
     
     var name : String
@@ -28,6 +30,7 @@ class TimerSound {
     }
     
     private var player: AVAudioPlayer?
+//    private var audioSession: AVAudioSession
     
     func play() {
         guard let url = TimerSoundLibrary.getInstance()!.bundle.url(forResource: filename, withExtension: filetype) else { print("url not found") ; return }
@@ -35,8 +38,14 @@ class TimerSound {
         do {
             
             //player = try AVAudioPlayer(data: asset!.data, fileTypeHint: AVFileType.mp3.rawValue)
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(AVAudioSession.Category.playback)
             player = try AVAudioPlayer(contentsOf: url, fileTypeHint: filetype)
-        
+//            let player = AVAudioPlayerNode()
+//            let f = try! AVAudioFile(forReading: url)
+//            let mixer = self.engine.
+            
+            player?.prepareToPlay()
             player!.play()
         } catch let error as NSError {
             print(error.localizedDescription)
@@ -74,6 +83,9 @@ class TimerSoundLibrary {
         loadSoundBundle(fromBundle: soundBundle, manifestName: manifestName, ext: withExtension)
     }
     
+    subscript(key: String) -> TimerSound? {
+        return timerSoundsDictionary[key]
+    }
     
     
     private func loadSoundBundle(fromBundle: Bundle, manifestName: String, ext: String) {
