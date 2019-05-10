@@ -13,61 +13,69 @@ import UIKit
 //protocol
 
 class TimerSound  {
-    // https://freesound.org/people/juskiddink/sounds/122647/
     
     var name : String
-    var filename: String
+    var fileURL: URL
     var filetype: String
     var attribution: String
+    private var player: AVAudioPlayer?
     
     
-    
-    init(name: String, filename: String, filetype: String, attribution: String) {
+    init(name: String, fileURL: URL, filetype: String, attribution: String) {
         self.name = name
-        self.filename = filename
+        self.fileURL = fileURL
         self.filetype = filetype
         self.attribution = attribution
-    }
-    
-    private var player: AVAudioPlayer?
-//    private var audioSession: AVAudioSession
-    
-    func play() {
-        guard let url = TimerSoundLibrary.getInstance()!.bundle.url(forResource: filename, withExtension: filetype) else { print("url not found") ; return }
-        
         do {
-            
-            //player = try AVAudioPlayer(data: asset!.data, fileTypeHint: AVFileType.mp3.rawValue)
-            let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(AVAudioSession.Category.playback)
-            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: filetype)
-//            let player = AVAudioPlayerNode()
-//            let f = try! AVAudioFile(forReading: url)
-//            let mixer = self.engine.
-            
-            player?.prepareToPlay()
-            player!.play()
+            self.player = try AVAudioPlayer(contentsOf: fileURL, fileTypeHint: filetype)
         } catch let error as NSError {
             print(error.localizedDescription)
         }
     }
     
-//    static func playSound(bundle: Bundle, timerSound: TimerSound) {
-//        
-//        guard let url = bundle.url(forResource: timerSound.filename, withExtension: timerSound.filetype) else { print("url not found") ; return }
-//        
-//        do {
-//            
-//            //player = try AVAudioPlayer(data: asset!.data, fileTypeHint: AVFileType.mp3.rawValue)
-//            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: timerSound.filetype)
-//            player!.play()
-//        } catch let error as NSError {
-//            print(error.localizedDescription)
-//        }
-//    }
     
+//    private var audioSession: AVAudioSession
     
+    func play() {
+        do {
+            
+            //player = try AVAudioPlayer(data: asset!.data, fileTypeHint: AVFileType.mp3.rawValue)
+            
+//            let player = AVAudioPlayerNode()
+//            let f = try! AVAudioFile(forReading: url)
+//            let mixer = self.engine.
+            player?.stop()
+            player?.prepareToPlay()
+            player!.play()
+            
+        } catch let error as NSError {
+            print(error.localizedDescription)
+        }
+    }
     
+    func play(delay: TimeInterval) {
+        do {
+            
+            //player = try AVAudioPlayer(data: asset!.data, fileTypeHint: AVFileType.mp3.rawValue)
+            
+            player?.stop()
+            player?.prepareToPlay()
+            player!.play(atTime: player!.deviceCurrentTime + delay)
+            
+        } catch let error as NSError {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func currentTime() -> TimeInterval {
+        player?.prepareToPlay()
+        return player!.currentTime
+    }
+    
+    func duration() -> TimeInterval {
+        player?.prepareToPlay()
+        return player!.duration
+    }
 }
 
 class TimerSoundLibrary {
@@ -84,8 +92,16 @@ class TimerSoundLibrary {
     }
     
     subscript(key: String) -> TimerSound? {
-        return timerSoundsDictionary[key]
+        get {
+            return timerSoundsDictionary[key]
+        }
+        
+        set (newValue) {
+            timerSoundsDictionary[key] = newValue
+        }
     }
+    
+    
     
     
     private func loadSoundBundle(fromBundle: Bundle, manifestName: String, ext: String) {
@@ -97,8 +113,9 @@ class TimerSoundLibrary {
                     if let paramsDictionary = timerSoundParams as? [String: String] {
                         let filename = paramsDictionary["filename"]
                         let filetype = paramsDictionary["filetype"]
+                        let fileURL = fromBundle.url(forResource: filename, withExtension: filetype)!
                         let attribution = paramsDictionary["attribution"]
-                        timerSoundsDictionary[timerSoundName] = TimerSound(name: timerSoundName, filename: filename!, filetype: filetype!, attribution: attribution!)
+                        timerSoundsDictionary[timerSoundName] = TimerSound(name: timerSoundName, fileURL: fileURL, filetype: filetype!, attribution: attribution!)
                     }
                 }
             }

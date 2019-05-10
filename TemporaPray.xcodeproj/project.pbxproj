@@ -14,7 +14,6 @@
 		7380B92D2278879F00D5647E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7380B92B2278879F00D5647E /* LaunchScreen.storyboard */; };
 		7380B9382278879F00D5647E /* TemporaPrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380B9372278879F00D5647E /* TemporaPrayTests.swift */; };
 		7380B949227894B200D5647E /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380B948227894B200D5647E /* Preferences.swift */; };
-		7380B94B227896D100D5647E /* TimerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380B94A227896D100D5647E /* TimerController.swift */; };
 		7380B94F227897F500D5647E /* TimerSound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380B94D227897F500D5647E /* TimerSound.swift */; };
 		7380B950227897F500D5647E /* WorkSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380B94E227897F500D5647E /* WorkSession.swift */; };
 		7380B951227897F500D5647E /* PausableTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380B94C227897F500D5647E /* PausableTimer.swift */; };
@@ -45,7 +44,6 @@
 		7380B9372278879F00D5647E /* TemporaPrayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaPrayTests.swift; sourceTree = "<group>"; };
 		7380B9392278879F00D5647E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7380B948227894B200D5647E /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
-		7380B94A227896D100D5647E /* TimerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerController.swift; sourceTree = "<group>"; };
 		7380B94C227897F500D5647E /* PausableTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PausableTimer.swift; sourceTree = "<group>"; };
 		7380B94D227897F500D5647E /* TimerSound.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSound.swift; sourceTree = "<group>"; };
 		7380B94E227897F500D5647E /* WorkSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkSession.swift; sourceTree = "<group>"; };
@@ -96,7 +94,6 @@
 				73EB31092279A9AE00453AA0 /* Model */,
 				7380B9222278879A00D5647E /* AppDelegate.swift */,
 				7380B9242278879A00D5647E /* ViewController.swift */,
-				7380B94A227896D100D5647E /* TimerController.swift */,
 				7380B94C227897F500D5647E /* PausableTimer.swift */,
 				7380B94D227897F500D5647E /* TimerSound.swift */,
 				7380B94E227897F500D5647E /* WorkSession.swift */,
@@ -232,7 +229,6 @@
 			files = (
 				7380B9252278879A00D5647E /* ViewController.swift in Sources */,
 				7380B94F227897F500D5647E /* TimerSound.swift in Sources */,
-				7380B94B227896D100D5647E /* TimerController.swift in Sources */,
 				73EB310B2279A9D200453AA0 /* Catalog.swift in Sources */,
 				73A846C02283441F00598F76 /* FileCache.swift in Sources */,
 				7380B9232278879A00D5647E /* AppDelegate.swift in Sources */,
