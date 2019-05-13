@@ -50,6 +50,7 @@ class ViewController: UIViewController {
                         if success {
                             self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: fileCache[sectionURL]!, filetype: "mp3", attribution: "")
                             self.initiateSoundEngine()
+                        
                             self.loadingComplete = true
                         }})
                 
@@ -66,8 +67,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         // Do any additional setup after loading the view.
         loadAuthorCatalog(urlString: authorURL)
-        updateUILabel()
         
+        self.updateUILabel()
         
         super.viewDidLoad()
         
@@ -93,7 +94,7 @@ class ViewController: UIViewController {
         engine.attach(bellPlayerEnd)
         engine.attach(audioPlayer)
         engine.connect(bellPlayer, to: engine.mainMixerNode, format: bellPlayer.outputFormat(forBus: 0))
-        engine.connect(bellPlayerEnd, to: engine.mainMixerNode, format: bellPlayer.outputFormat(forBus: 0))
+        engine.connect(bellPlayerEnd, to: engine.mainMixerNode, format: bellPlayerEnd.outputFormat(forBus: 0))
         engine.connect(audioPlayer, to: engine.mainMixerNode, format: audioPlayer.outputFormat(forBus: 0))
         
         engine.prepare()
@@ -108,23 +109,27 @@ class ViewController: UIViewController {
         
     }
     
-    func playSoundFromMixer() {
+    func scheduleSounds() {
         
-        let outputFormat = bellPlayer.outputFormat(forBus: 0)
-        let startSampleTime = bellPlayer.lastRenderTime!.sampleTime
+        let outputFormat = self.bellPlayer.outputFormat(forBus: 0)
         
-        let audioStartTime = AVAudioTime.init(sampleTime: startSampleTime , atRate: outputFormat.sampleRate)
-        let delayTime = Double(audioFile!.length) / Double(audioFile!.fileFormat.sampleRate) + 1.0
-        let bellEndDelayTime = AVAudioTime.init(sampleTime: audioPlayer.lastRenderTime!.sampleTime + Int64((delayTime * outputFormat.sampleRate)), atRate: outputFormat.sampleRate)
+//bellPlayer.scheduleFile(bellFile!, at: nil, completionHandler: {})
         
+        //attempt to schedule it for end of playback (roughly 8 s in)
+        let delay = 2.0 //1 s
+        let startTime = AVAudioTime.init(sampleTime: bellPlayer.lastRenderTime!.sampleTime + Int64(delay*outputFormat.sampleRate), atRate: outputFormat.sampleRate)
+        bellPlayer.scheduleFile(bellFile!, at: nil) {}
         
-        bellPlayer.scheduleFile(bellFile!, at: nil, completionHandler: {})
-        audioPlayer.scheduleFile(audioFile!, at: audioStartTime, completionHandler: {})
-        bellPlayerEnd.scheduleFile(bellFile!, at: bellEndDelayTime, completionHandler: {self.delay(3.0) {self.engine.stop()}})
+//        bellPlayerEnd.scheduleFile(bellFile!, at: nil, completionHandler: {})
         
+        bellPlayerEnd.scheduleFile(bellFile!, at: nil, completionHandler: {print("blarg")})
+        bellPlayerEnd.play(at: startTime)
         bellPlayer.play()
-        bellPlayerEnd.play()
-        audioPlayer.play()
+        
+        // I guess at this point what I need to do is create nodes for each, then do play at with proper delay.
+        
+        
+
         
     }
     
@@ -154,11 +159,20 @@ class ViewController: UIViewController {
             let defaults = UserDefaults()
             let duration = defaults.double(forKey: Preferences.SessionLength.rawValue)
             meditationTimer.duration = duration
+            meditationTimer.onPause = {
+                self.engine.pause()
+            }
+            
+            meditationTimer.onResume = {
+                try! self.engine.start()
+            }
+            
             meditationTimer.onEnd = {
                showPlayButton()
+                self.updateUILabel()
                 self.meditationTimer.elapsedTime = 0
-                try! self.engine.start()
-                self.playSoundFromMixer()
+//                try! self.engine.start()
+                self.scheduleSounds()
             }
             
             
@@ -168,21 +182,13 @@ class ViewController: UIViewController {
             }
             
             //play the dong
-            
-            
+        
             
             if(loadingComplete) {
                 showPauseButton()
+                updateUILabel()
                 DispatchQueue.global(qos: .userInitiated).async {
-//                    let bellSound = self.soundLibrary["Ship Bell"]!
-//
-//                    bellSound.play()
-//
-//                    let sectionAudio = self.soundLibrary[self.currentSection!.audioURL]!
-//                    sectionAudio.play(delay: bellSound.duration())
-
-                    self.playSoundFromMixer()
-                    
+                    self.scheduleSounds()
                 }
                 self.meditationTimer.start()
             }

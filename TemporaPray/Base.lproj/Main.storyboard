@@ -55,7 +55,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <customObject id="UG7-ZQ-dyb" customClass="TimerController"/>
             </objects>
             <point key="canvasLocation" x="138.75" y="138.38028169014083"/>
         </scene>

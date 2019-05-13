@@ -21,6 +21,8 @@ class PausableTimer {
     var onPause: () -> ()
     //block to call on end
     var onEnd: () -> ()
+    //block to call on resume
+    var onResume: () -> ()
     //elapsed time
     var elapsedTime: TimeInterval
     //timer
@@ -38,16 +40,18 @@ class PausableTimer {
         update = {}
         onPause = {}
         onEnd = {}
+        onResume = {}
         elapsedTime = 0
         timer = nil
         isRunning = false
         lastTimerCall = Date()
     }
     
-    init(duration: TimeInterval, update: @escaping () -> (), onPause: @escaping () -> (), onEnd: @escaping () -> ()) {
+    init(duration: TimeInterval, update: @escaping () -> (), onPause: @escaping () -> (), onResume: @escaping () -> (), onEnd: @escaping () -> ()) {
         self.duration = duration
         self.update = update
         self.onPause = onPause
+        self.onResume = onResume
         self.onEnd = onEnd
         self.elapsedTime = 0
         timer = nil
@@ -85,6 +89,7 @@ class PausableTimer {
     func resume() {
         if(isRunning == false) {
             isRunning = true
+            self.onResume()
         }
     }
     
