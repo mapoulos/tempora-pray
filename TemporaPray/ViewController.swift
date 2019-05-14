@@ -10,20 +10,26 @@ import UIKit
 import AVFoundation
 import os
 class ViewController: UIViewController {
+    //@IBOutlet var timerView: UIView!
+    
     @IBOutlet var timerView: UIView!
     
     @IBOutlet weak var timerLabel: UILabel!
     let authorURL = "https://localhost:8080/authors"
-    var meditationTimer: PausableTimer = PausableTimer()
+    let defaults = UserDefaults()
+    lazy var meditationTimer = PausableTimer(duration: 0, update: {}, onPause: {}, onResume: {}, onEnd: {})
+    
     var authorCatalog: [Author] = Array()
     
     var currentAuthor: Author?
     var currentWork: Work?
     var currentSection: Section?
     var soundLibrary: TimerSoundLibrary {
-        let soundBundle = Bundle(path: Bundle.main.path(forResource: "Sounds", ofType: "bundle")!)
-        TimerSoundLibrary.initialize(soundBundle: soundBundle!, manifestName: "manifest", withExtension: "json")
-        os_log("finished loading the sound library")
+        if(TimerSoundLibrary.getInstance() == nil) {
+            let soundBundle = Bundle(path: Bundle.main.path(forResource: "Sounds", ofType: "bundle")!)
+            TimerSoundLibrary.initialize(soundBundle: soundBundle!, manifestName: "manifest", withExtension: "json")
+            os_log("finished loading the sound library")
+        }
         return TimerSoundLibrary.getInstance()!
     }
     
@@ -50,7 +56,6 @@ class ViewController: UIViewController {
                         if success {
                             self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: fileCache[sectionURL]!, filetype: "mp3", attribution: "")
                             self.initiateSoundEngine()
-                        
                             self.loadingComplete = true
                         }})
                 
@@ -64,38 +69,106 @@ class ViewController: UIViewController {
         task.resume()
     }
     
+    @objc func onDefaultsChange(_ notification:Notification) {
+        let defaults = UserDefaults()
+        let dur = defaults.double(forKey: Preferences.SessionLength.rawValue)
+        meditationTimer.duration = dur
+        self.updateUILabel()
+    }
     override func viewDidLoad() {
         // Do any additional setup after loading the view.
         loadAuthorCatalog(urlString: authorURL)
         
         self.updateUILabel()
+        NotificationCenter.default.addObserver(self, selector: #selector(onDefaultsChange(_:)), name: UserDefaults.didChangeNotification, object: nil)
         
         super.viewDidLoad()
+        meditationTimer.duration = UserDefaults().double(forKey: Preferences.SessionLength.rawValue)
+        self.updateUILabel()
+        let upswipe = UISwipeGestureRecognizer.init(target: self, action: #selector(swipeHandler))
+        upswipe.direction = .up
+        
+        let downswipe = UISwipeGestureRecognizer.init(target: self, action:#selector(swipeHandler))
+        downswipe.direction = .down
+        timerView.addGestureRecognizer(upswipe)
+        timerView.addGestureRecognizer(downswipe)
         
         
     }
     
+    @objc func swipeHandler(_ obj : UISwipeGestureRecognizer) {
+        
+        if (meditationTimer.isRunning == false && meditationTimer.started() == false) {
+            let defaults = UserDefaults()
+            let curSessionLength = defaults.double(forKey: Preferences.SessionLength.rawValue)
+            
+            switch obj.direction {
+            case .up:
+                defaults.setValue(curSessionLength+300, forKey: Preferences.SessionLength.rawValue)
+                defaults.synchronize()
+                os_log("increased session length by 5 minutes")
+            case .down:
+                if(curSessionLength > 300) {
+                    defaults.setValue(curSessionLength-300, forKey: Preferences.SessionLength.rawValue)
+                
+                }
+                defaults.synchronize()
+                os_log("decreased session length by 5 minutes")
+            default:
+                print("Unexpected swipe")
+            }
+        }
+        
+        print("Swiping \(obj.direction)")
+    }
+    
     var engine = AVAudioEngine()
-    var bellPlayer = AVAudioPlayerNode()
     var bellFile: AVAudioFile?
-    var audioPlayer = AVAudioPlayerNode()
-    var audioFile: AVAudioFile?
-    var bellPlayerEnd = AVAudioPlayerNode()
+    var meditationFile: AVAudioFile?
+    
+    var bellBuffer: AVAudioPCMBuffer?
+    var meditationBuffer: AVAudioPCMBuffer?
+
+    var bellPlayer = AVAudioPlayerNode()
+    var meditationPlayer = AVAudioPlayerNode()
+
     
     func initiateSoundEngine() {
-        let url1 = soundLibrary["Ship Bell"]!.fileURL
-        bellFile = try! AVAudioFile(forReading: url1)
+        
+        func loadMeditationBuffer() {
+            let url2 = soundLibrary[currentSection!.audioURL]!.fileURL
+            meditationFile = try! AVAudioFile(forReading: url2)
+            meditationBuffer = AVAudioPCMBuffer(pcmFormat: meditationFile!.processingFormat, frameCapacity: UInt32(meditationFile?.length ?? 0))
+            try! meditationFile!.read(into: meditationBuffer!)
+        }
+        loadMeditationBuffer()
+        
+        func loadBellBuffer() {
+            let url1 = soundLibrary["Ship Bell"]!.fileURL
+            bellFile = try! AVAudioFile(forReading: url1)
+            //             let manifestFile =
+            
+            let format = bellFile!.processingFormat
+            let length = bellFile!.length
+            bellBuffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: UInt32(length))
+            try! bellFile!.read(into: bellBuffer!)
+        }
+        loadBellBuffer()
         
         
-        let url2 = soundLibrary[currentSection!.audioURL]!.fileURL
-        audioFile = try! AVAudioFile(forReading: url2)
+        func attachPlayers() {
+            engine.attach(bellPlayer)
+            engine.attach(meditationPlayer)
+        }
         
-        engine.attach(bellPlayer)
-        engine.attach(bellPlayerEnd)
-        engine.attach(audioPlayer)
-        engine.connect(bellPlayer, to: engine.mainMixerNode, format: bellPlayer.outputFormat(forBus: 0))
-        engine.connect(bellPlayerEnd, to: engine.mainMixerNode, format: bellPlayerEnd.outputFormat(forBus: 0))
-        engine.connect(audioPlayer, to: engine.mainMixerNode, format: audioPlayer.outputFormat(forBus: 0))
+        attachPlayers()
+        
+        func connectPlayersToMainMixer() {
+            engine.connect(bellPlayer, to: engine.mainMixerNode, format: bellFile!.processingFormat)
+            engine.connect(meditationPlayer, to: engine.mainMixerNode, format: meditationFile!.processingFormat)
+        }
+        
+        connectPlayersToMainMixer()
         
         engine.prepare()
         try! self.engine.start()
@@ -110,27 +183,27 @@ class ViewController: UIViewController {
     }
     
     func scheduleSounds() {
-        
         let outputFormat = self.bellPlayer.outputFormat(forBus: 0)
+        let bellLength = Double(bellFile!.length) / outputFormat.sampleRate
+        let meditationLength = Double(meditationFile!.length) / outputFormat.sampleRate
+        let sessionLength = meditationTimer.duration
+        let gapFollowingMeditation = 1.0
         
-//bellPlayer.scheduleFile(bellFile!, at: nil, completionHandler: {})
+        func secToFrame(_ seconds : Double) -> AVAudioTime {
+            return AVAudioTime.init(sampleTime: Int64(seconds*outputFormat.sampleRate), atRate: outputFormat.sampleRate)
+        }
         
-        //attempt to schedule it for end of playback (roughly 8 s in)
-        let delay = 2.0 //1 s
-        let startTime = AVAudioTime.init(sampleTime: bellPlayer.lastRenderTime!.sampleTime + Int64(delay*outputFormat.sampleRate), atRate: outputFormat.sampleRate)
-        bellPlayer.scheduleFile(bellFile!, at: nil) {}
+        bellPlayer.scheduleBuffer(bellBuffer!, at: nil) {}
+        meditationPlayer.scheduleBuffer(meditationBuffer!, at: secToFrame(bellLength)) {}
+        bellPlayer.scheduleBuffer(bellBuffer!, at: secToFrame(bellLength+meditationLength+1)) {}
         
-//        bellPlayerEnd.scheduleFile(bellFile!, at: nil, completionHandler: {})
-        
-        bellPlayerEnd.scheduleFile(bellFile!, at: nil, completionHandler: {print("blarg")})
-        bellPlayerEnd.play(at: startTime)
-        bellPlayer.play()
-        
-        // I guess at this point what I need to do is create nodes for each, then do play at with proper delay.
-        
+        bellPlayer.scheduleBuffer(bellBuffer!, at: secToFrame(sessionLength-bellLength*2-meditationLength-gapFollowingMeditation)) {}
+        meditationPlayer.scheduleBuffer(meditationBuffer!, at: secToFrame(sessionLength-bellLength-meditationLength-gapFollowingMeditation)) {}
+        bellPlayer.scheduleBuffer(bellBuffer!, at: secToFrame(sessionLength-bellLength)) {}
         
 
-        
+        bellPlayer.play()
+        meditationPlayer.play()
     }
     
     func updateUILabel() {
@@ -138,7 +211,7 @@ class ViewController: UIViewController {
         formatter.unitsStyle = .positional
         formatter.allowedUnits = [.hour, .minute, .second]
         //                formatter.uni
-        let timeRemaining = self.meditationTimer.duration - self.meditationTimer.elapsedTime
+        let timeRemaining = self.meditationTimer.duration - self.meditationTimer.elapsedTime    
         self.timerLabel.text = formatter.string(from: timeRemaining)
     }
     
@@ -171,18 +244,14 @@ class ViewController: UIViewController {
                showPlayButton()
                 self.updateUILabel()
                 self.meditationTimer.elapsedTime = 0
-//                try! self.engine.start()
-                self.scheduleSounds()
+                self.engine.stop()
+
             }
-            
-            
             
             meditationTimer.update = {
                 self.updateUILabel()
             }
             
-            //play the dong
-        
             
             if(loadingComplete) {
                 showPauseButton()
@@ -192,10 +261,7 @@ class ViewController: UIViewController {
                 }
                 self.meditationTimer.start()
             }
-            
-            
-            
-            
+    
             
         } else {
             if(meditationTimer.isRunning == true) {
@@ -203,7 +269,6 @@ class ViewController: UIViewController {
                 meditationTimer.pause()
             } else {
                 showPauseButton()
-    
                 meditationTimer.resume()
             }
             

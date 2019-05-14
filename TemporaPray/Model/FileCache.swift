@@ -83,7 +83,6 @@ public class FileCache : Codable {
             callback(false)
         }
         task.resume()
-        //put in
     }
     
 //    func downloadFileFromURLSync(url: String) {

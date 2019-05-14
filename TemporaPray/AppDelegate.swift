@@ -19,9 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // set the defaults
         let defaults = UserDefaults()
-        let defaultsDictionary = [Preferences.SessionLength.rawValue: 90, Preferences.IntermittentBell.rawValue: 120, Preferences.TextID.rawValue: "evagrius.onprayer.1"] as [String: Any]
+        let defaultsDictionary = [Preferences.SessionLength.rawValue: 300, Preferences.IntermittentBell.rawValue: 120, Preferences.TextID.rawValue: "evagrius.onprayer.1"] as [String: Any]
         defaults.register(defaults: defaultsDictionary)
-        
+        defaults.synchronize()
         
         return true
     }

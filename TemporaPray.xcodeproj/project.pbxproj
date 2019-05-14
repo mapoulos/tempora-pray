@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7319ABFE228B0C6000851EFC /* AuthorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7319ABFD228B0C6000851EFC /* AuthorTableViewController.swift */; };
 		7380B9232278879A00D5647E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380B9222278879A00D5647E /* AppDelegate.swift */; };
 		7380B9252278879A00D5647E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7380B9242278879A00D5647E /* ViewController.swift */; };
 		7380B9282278879B00D5647E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7380B9262278879B00D5647E /* Main.storyboard */; };
@@ -33,6 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7319ABFD228B0C6000851EFC /* AuthorTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorTableViewController.swift; sourceTree = "<group>"; };
 		7380B91F2278879A00D5647E /* TemporaPray.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TemporaPray.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7380B9222278879A00D5647E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7380B9242278879A00D5647E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 			children = (
 				73EB31092279A9AE00453AA0 /* Model */,
 				7380B9222278879A00D5647E /* AppDelegate.swift */,
+				7319ABFD228B0C6000851EFC /* AuthorTableViewController.swift */,
 				7380B9242278879A00D5647E /* ViewController.swift */,
 				7380B94C227897F500D5647E /* PausableTimer.swift */,
 				7380B94D227897F500D5647E /* TimerSound.swift */,
@@ -235,6 +238,7 @@
 				7380B951227897F500D5647E /* PausableTimer.swift in Sources */,
 				7380B949227894B200D5647E /* Preferences.swift in Sources */,
 				7380B950227897F500D5647E /* WorkSession.swift in Sources */,
+				7319ABFE228B0C6000851EFC /* AuthorTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
