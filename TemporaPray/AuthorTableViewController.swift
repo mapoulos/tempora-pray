@@ -9,7 +9,13 @@
 import UIKit
 
 class AuthorTableViewController: UITableViewController {
-
+    
+    private static var authors: [Author] = []
+    
+    public static func setAuthors(_ authorList : [Author]) {
+        authors = authorList
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -29,7 +35,7 @@ class AuthorTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 10
+        return AuthorTableViewController.authors.count
     }
 
     let cellID = "Cell"

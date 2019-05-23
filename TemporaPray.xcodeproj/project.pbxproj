@@ -35,6 +35,7 @@
 
 /* Begin PBXFileReference section */
 		7319ABFD228B0C6000851EFC /* AuthorTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorTableViewController.swift; sourceTree = "<group>"; };
+		73415B062296DA69001E6D05 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7380B91F2278879A00D5647E /* TemporaPray.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TemporaPray.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7380B9222278879A00D5647E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7380B9242278879A00D5647E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +76,7 @@
 		7380B9162278879A00D5647E = {
 			isa = PBXGroup;
 			children = (
+				73415B062296DA69001E6D05 /* README.md */,
 				7380B9212278879A00D5647E /* TemporaPray */,
 				7380B9362278879F00D5647E /* TemporaPrayTests */,
 				7380B9202278879A00D5647E /* Products */,
