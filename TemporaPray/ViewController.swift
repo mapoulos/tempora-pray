@@ -44,6 +44,7 @@ class ViewController: UIViewController {
             do {
                 let response = try JSONDecoder().decode(WebResponse.self, from: data)
                 self.authorList = response.getAuthors()!
+                AuthorTableViewController.setAuthors(self.authorList)
                 //by default select first author, first work, first section
                 self.currentAuthor = self.authorList.first
                 self.currentWork = self.currentAuthor?.works.first

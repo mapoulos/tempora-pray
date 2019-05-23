@@ -1,22 +1,16 @@
 //
-//  AuthorTableViewController.swift
+//  WorkTableViewController.swift
 //  TemporaPray
 //
-//  Created by Matthew Poulos on 5/14/19.
+//  Created by Matthew Poulos on 5/23/19.
 //  Copyright © 2019 Equulus. All rights reserved.
 //
 
 import UIKit
 
-class AuthorTableViewController: UITableViewController {
-    
-    private static var authors: [Author] = []
-    
-    public static func setAuthors(_ authorList : [Author]) {
-        authors = authorList
-    }
-    
-    // TODO, load the authors here instead of in the main view controller
+class SectionTableViewController: UITableViewController {
+
+    private static var works: [Work] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,49 +25,24 @@ class AuthorTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return AuthorTableViewController.authors.count
+        // #warning Incomplete implementation, return the number of sections
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let authorsArr = AuthorTableViewController.authors
-        var sum = 0
-        for author in authorsArr {
-            sum += author.works.count
-        }
-        return sum
-        
-    }
-    
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let section = AuthorTableViewController.authors[section]
-        return section.name
+        // #warning Incomplete implementation, return the number of rows
+        return 0
     }
 
-    let cellID = "Cell"
+    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell: UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
 
-        if cell == nil {
-            cell = UITableViewCell(style: .default, reuseIdentifier: self.cellID)
-//            cell.textLabel!.textColor = .white
-//            cell.back  = .black
-        }
-        let row = indexPath.row
-        let section = indexPath.section
-        
-        //TODO add some error echecking here
-        let authors = AuthorTableViewController.authors
-        
-        let author = authors[indexPath.section]
-        let works = author.works
-        
-        let work = author.works[indexPath.row]
-        let name = work.name
-        cell.textLabel!.text = name
+        // Configure the cell...
 
         return cell
     }
-    
+    */
 
     /*
     // Override to support conditional editing of the table view.
