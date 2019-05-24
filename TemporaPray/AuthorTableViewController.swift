@@ -17,7 +17,7 @@ class AuthorTableViewController: UITableViewController {
     }
     
     // TODO, load the authors here instead of in the main view controller
-    
+    let headerID = "Header"
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,6 +26,8 @@ class AuthorTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: self.headerID)
+        
     }
 
     // MARK: - Table view data source
@@ -35,18 +37,34 @@ class AuthorTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let authorsArr = AuthorTableViewController.authors
-        var sum = 0
-        for author in authorsArr {
-            sum += author.works.count
-        }
-        return sum
+        let authors = AuthorTableViewController.authors
+        
+        return authors[section].works.count
         
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let section = AuthorTableViewController.authors[section]
         return section.name
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UITableViewHeaderFooterView {
+        let h = tableView.dequeueReusableHeaderFooterView(withIdentifier: self.headerID)!
+        if h.viewWithTag(1) == nil {
+            h.backgroundView = UIView()
+            h.backgroundView?.backgroundColor = .gray
+            let label = UILabel()
+            label.tag = 1
+            label.font = UIFont(name:"Baskerville", size: 22)
+            label.textColor = .white
+            label.backgroundColor = .clear
+            h.contentView.addSubview(label)
+            //add constraints perhaps?
+        }
+        let label = h.contentView.viewWithTag(1) as! UILabel
+        label.text = AuthorTableViewController.authors[section].name
+        return h
     }
 
     let cellID = "Cell"
@@ -55,18 +73,12 @@ class AuthorTableViewController: UITableViewController {
 
         if cell == nil {
             cell = UITableViewCell(style: .default, reuseIdentifier: self.cellID)
-//            cell.textLabel!.textColor = .white
-//            cell.back  = .black
+            cell.textLabel!.textColor = .white
+            cell.backgroundColor  = .black
         }
-        let row = indexPath.row
-        let section = indexPath.section
         
-        //TODO add some error echecking here
         let authors = AuthorTableViewController.authors
-        
         let author = authors[indexPath.section]
-        let works = author.works
-        
         let work = author.works[indexPath.row]
         let name = work.name
         cell.textLabel!.text = name
