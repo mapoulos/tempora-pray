@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     
     @IBOutlet var timerView: UIView!
     
+    
+    @IBOutlet weak var meditationButton: UIButton!
     @IBOutlet weak var timerLabel: UILabel!
     let authorURL = "https://localhost:8080/authors"
     let defaults = UserDefaults()
@@ -44,7 +46,6 @@ class ViewController: UIViewController {
             do {
                 let response = try JSONDecoder().decode(WebResponse.self, from: data)
                 self.authorList = response.getAuthors()!
-                AuthorTableViewController.setAuthors(self.authorList)
                 //by default select first author, first work, first section
                 self.currentAuthor = self.authorList.first
                 self.currentWork = self.currentAuthor?.works.first
@@ -56,7 +57,7 @@ class ViewController: UIViewController {
                     { (success:Bool) in
                         if success {
                             self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: fileCache[sectionURL]!, filetype: "mp3", attribution: "")
-                            self.initiateSoundEngine()
+//                            self.initiateSoundEngine()
                             self.loadingComplete = true
                         }})
                 
@@ -70,12 +71,46 @@ class ViewController: UIViewController {
         task.resume()
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "RootViewToSelectWork" {
+            let authTableViewController = segue.destination as! AuthorTableViewController
+            authTableViewController.authors = self.authorList
+            self.navigationController?.isNavigationBarHidden = false;
+        }
+    }
+    
+    @IBAction func sectionSelected(_seg: UIStoryboardSegue) {
+        
+    }
+    
+    
+    
     @objc func onDefaultsChange(_ notification:Notification) {
         let defaults = UserDefaults()
         let dur = defaults.double(forKey: Preferences.SessionLength.rawValue)
         meditationTimer.duration = dur
         self.updateUILabel()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+        if currentAuthor != nil {
+            loadingComplete = true
+            FileCache.shared().downloadFileFromURLAsync(urlString: currentSection!.audioURL, callback: { (success:Bool) in
+                    if success {
+                        let fileCache = FileCache.shared()
+                        let sectionURL = self.currentSection!.audioURL
+                        self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: fileCache[sectionURL]!, filetype: "mp3", attribution: "")
+                        
+                    }
+
+            })
+            self.meditationButton.titleLabel!.text = "\(currentAuthor!.name),  \(currentSection!.number)"
+//            self.meditationButton.widthAnchor
+        }
+    }
+    
     override func viewDidLoad() {
         // Do any additional setup after loading the view.
         loadAuthorCatalog(urlString: authorURL)
@@ -134,6 +169,7 @@ class ViewController: UIViewController {
     var meditationPlayer = AVAudioPlayerNode()
 
     
+    
     func initiateSoundEngine() {
         
         func loadMeditationBuffer() {
@@ -142,6 +178,7 @@ class ViewController: UIViewController {
             meditationBuffer = AVAudioPCMBuffer(pcmFormat: meditationFile!.processingFormat, frameCapacity: UInt32(meditationFile?.length ?? 0))
             try! meditationFile!.read(into: meditationBuffer!)
         }
+        
         loadMeditationBuffer()
         
         func loadBellBuffer() {
@@ -214,6 +251,7 @@ class ViewController: UIViewController {
         //                formatter.uni
         let timeRemaining = self.meditationTimer.duration - self.meditationTimer.elapsedTime    
         self.timerLabel.text = formatter.string(from: timeRemaining)
+        //self.meditationButton.titleLabel!.text = "Evag"
     }
     
     @IBAction func playButtonPressed(_ sender: UIButton?) {
@@ -258,6 +296,7 @@ class ViewController: UIViewController {
                 showPauseButton()
                 updateUILabel()
                 DispatchQueue.global(qos: .userInitiated).async {
+                    self.initiateSoundEngine()
                     self.scheduleSounds()
                 }
                 self.meditationTimer.start()

@@ -10,11 +10,9 @@ import UIKit
 
 class AuthorTableViewController: UITableViewController {
     
-    private static var authors: [Author] = []
+    var authors: [Author] = []
     
-    public static func setAuthors(_ authorList : [Author]) {
-        authors = authorList
-    }
+    
     
     // TODO, load the authors here instead of in the main view controller
     let headerID = "Header"
@@ -27,25 +25,26 @@ class AuthorTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         self.tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: self.headerID)
+        self.navigationController?.navigationBar.isHidden = false
         
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return AuthorTableViewController.authors.count
+        return authors.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let authors = AuthorTableViewController.authors
+    
         
         return authors[section].works.count
         
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let section = AuthorTableViewController.authors[section]
-        return section.name
+    
+        return authors[section].name
     }
     
     
@@ -63,29 +62,47 @@ class AuthorTableViewController: UITableViewController {
             //add constraints perhaps?
         }
         let label = h.contentView.viewWithTag(1) as! UILabel
-        label.text = AuthorTableViewController.authors[section].name
+        label.text = authors[section].name
         return h
     }
 
-    let cellID = "Cell"
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell: UITableViewCell! = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "workCell", for: indexPath) as! WorkCell
 
-        if cell == nil {
-            cell = UITableViewCell(style: .default, reuseIdentifier: self.cellID)
-            cell.textLabel!.textColor = .white
-            cell.backgroundColor  = .black
-        }
         
-        let authors = AuthorTableViewController.authors
+        
         let author = authors[indexPath.section]
         let work = author.works[indexPath.row]
         let name = work.name
-        cell.textLabel!.text = name
+        cell.workNameLabel.text = name
+        cell.accessoryType = .disclosureIndicator
 
         return cell
     }
     
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let sectionTableViewController =  SectionTableViewController()
+//        let indexPath = self.tableView.indexPathForSelectedRow!
+//        let authorIndex = indexPath.section
+//        let workIndex = indexPath.row
+//        let work = self.authors[authorIndex].works[workIndex]
+//        sectionTableViewController.work = work
+//        self.navigationController!.pushViewController(sectionTableViewController, animated: true)
+//    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "SelectWorkToSelectSection" {
+            let sectionTableViewController = segue.destination as! SectionTableViewController
+            let indexPath = self.tableView.indexPathForSelectedRow!
+            let authorIndex = indexPath.section
+            let workIndex = indexPath.row
+            let work = self.authors[authorIndex].works[workIndex]
+            sectionTableViewController.author = self.authors[authorIndex]
+            sectionTableViewController.work = work
+            
+        }
+    }
 
     /*
     // Override to support conditional editing of the table view.
@@ -132,4 +149,8 @@ class AuthorTableViewController: UITableViewController {
     }
     */
 
+}
+
+class WorkCell : UITableViewCell {
+    @IBOutlet var workNameLabel : UILabel!
 }

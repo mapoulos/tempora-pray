@@ -10,7 +10,8 @@ import UIKit
 
 class SectionTableViewController: UITableViewController {
 
-    private static var works: [Work] = []
+    var author = Author()
+    var work = Work()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +21,7 @@ class SectionTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+//        self.tableView.register(SectionCell.self, forCellReuseIdentifier: cellID)
     }
 
     // MARK: - Table view data source
@@ -31,18 +33,33 @@ class SectionTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return work.sections.count
     }
 
-    /*
+    let cellID = "SectionTableCell"
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! SectionCell
 
-        // Configure the cell...
+//        cell.backgroundColor = .black
+        cell.sectionNumber.text = work.sections[indexPath.row].number
+        cell.sectionText.text = work.sections[indexPath.row].text
 
         return cell
     }
-    */
+ 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "SectionSelected" {
+            let rootViewController = segue.destination as! ViewController
+            let indexPath = self.tableView.indexPathForSelectedRow!
+            let sectionIndex = indexPath.row
+            let section = work.sections[sectionIndex]
+            rootViewController.currentAuthor = author
+            rootViewController.currentWork = work
+            rootViewController.currentSection = section
+            
+        }
+    }
 
     /*
     // Override to support conditional editing of the table view.
@@ -89,4 +106,10 @@ class SectionTableViewController: UITableViewController {
     }
     */
 
+}
+
+
+class SectionCell : UITableViewCell {
+    @IBOutlet var sectionNumber : UILabel!
+    @IBOutlet var sectionText : UILabel!
 }
