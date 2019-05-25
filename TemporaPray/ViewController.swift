@@ -106,7 +106,7 @@ class ViewController: UIViewController {
                     }
 
             })
-            self.meditationButton.titleLabel!.text = "\(currentAuthor!.name),  \(currentSection!.number)"
+            self.meditationButton.titleLabel!.text = "\(currentAuthor!.name), \(currentWork!.name) \(currentSection!.number)"
 //            self.meditationButton.widthAnchor
         }
     }
