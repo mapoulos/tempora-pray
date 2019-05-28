@@ -254,22 +254,39 @@ class ViewController: UIViewController {
         //self.meditationButton.titleLabel!.text = "Evag"
     }
     
+    
+    @IBOutlet weak var playButton: UIButton!
+    private func showPlayButton() {
+        //change the playButton icon
+        let playIcon = UIImage(named: "Play_icon")
+        playButton.setImage(playIcon, for: [])
+    }
+    
+    private func showPauseButton() {
+        let pauseIcon = UIImage(named: "Pause_icon")
+        playButton.setImage(pauseIcon, for: [])
+    }
+    
+    @IBAction func stopButtonPressed(_ sender: UIButton) {
+        // if playing, reset time, stop timers, stop sound engine
+        if(meditationTimer.started() == true) {
+            meditationTimer.stop()
+            self.meditationButton.isEnabled = true
+            showPlayButton()
+            updateUILabel()
+            engine.stop()
+        }
+    }
+    
+    
+    
     @IBAction func playButtonPressed(_ sender: UIButton?) {
         
-        func showPlayButton() {
-            //change the playButton icon
-            let playIcon = UIImage(named: "Play_icon")
-            sender!.setImage(playIcon, for: [])
-        }
-        
-        func showPauseButton() {
-            let pauseIcon = UIImage(named: "Pause_icon")
-            sender!.setImage(pauseIcon, for: [])
-        }
-        
         if(meditationTimer.started() == false) {
+            
             let defaults = UserDefaults()
             let duration = defaults.double(forKey: Preferences.SessionLength.rawValue)
+            meditationButton.isEnabled = false
             meditationTimer.duration = duration
             meditationTimer.onPause = {
                 self.engine.pause()
@@ -280,10 +297,11 @@ class ViewController: UIViewController {
             }
             
             meditationTimer.onEnd = {
-               showPlayButton()
+               self.showPlayButton()
                 self.updateUILabel()
                 self.meditationTimer.elapsedTime = 0
                 self.engine.stop()
+                self.meditationButton.isEnabled = true
 
             }
             

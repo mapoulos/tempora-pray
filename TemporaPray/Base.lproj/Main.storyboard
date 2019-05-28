@@ -34,25 +34,29 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cfH-Kb-vGq">
-                                <rect key="frame" x="136" y="405" width="48" height="48"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cfH-Kb-vGq">
+                                <rect key="frame" x="136" y="455" width="48" height="48"/>
                                 <state key="normal" image="Play_icon"/>
                                 <connections>
                                     <action selector="playButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ugi-MV-GZJ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xKb-d3-wMS">
-                                <rect key="frame" x="232" y="411" width="36" height="36"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="Button"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xKb-d3-wMS">
+                                <rect key="frame" x="221" y="455" width="48" height="48"/>
+                                <state key="normal" image="Stop_icon"/>
+                                <connections>
+                                    <action selector="stopButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0dc-vp-NGF"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="cfH-Kb-vGq" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6mi-nK-AtG"/>
                             <constraint firstItem="cWx-1p-4qu" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="7ag-vR-3Yz"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="xKb-d3-wMS" secondAttribute="trailing" constant="51" id="8ZJ-U6-6yA"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="xKb-d3-wMS" secondAttribute="bottom" constant="115" id="BRp-r5-tWu"/>
                             <constraint firstItem="cWx-1p-4qu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="I6x-N2-Jel"/>
+                            <constraint firstItem="xKb-d3-wMS" firstAttribute="leading" secondItem="cfH-Kb-vGq" secondAttribute="trailing" constant="37" id="K73-Fn-Hga"/>
                             <constraint firstItem="eVN-Ag-ced" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="XnR-lk-flR"/>
                             <constraint firstItem="cfH-Kb-vGq" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="-163" id="gPU-gE-GkX"/>
                             <constraint firstItem="eVN-Ag-ced" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="xde-FW-k6b"/>
@@ -65,7 +69,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="meditationButton" destination="cWx-1p-4qu" id="Jt1-0Q-Ot2"/>
+                        <outlet property="meditationButton" destination="cWx-1p-4qu" id="ims-3c-eru"/>
+                        <outlet property="playButton" destination="cfH-Kb-vGq" id="GaA-ks-qP9"/>
                         <outlet property="timerLabel" destination="eVN-Ag-ced" id="WtV-yF-Isq"/>
                         <outlet property="timerView" destination="8bC-Xf-vdC" id="RMF-RM-Ocx"/>
                     </connections>
@@ -195,6 +200,7 @@
     </scenes>
     <resources>
         <image name="Play_icon" width="48" height="48"/>
+        <image name="Stop_icon" width="48" height="48"/>
     </resources>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>
