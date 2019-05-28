@@ -12,8 +12,14 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
+    let authorURL = "https://localhost:8080/authors"
+    
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        Catalog.initializeCatalog(url: URL(string: authorURL)!)
+        
+        return true
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
@@ -22,6 +28,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let defaultsDictionary = [Preferences.SessionLength.rawValue: 300, Preferences.IntermittentBell.rawValue: 120, Preferences.TextID.rawValue: "evagrius.onprayer.1"] as [String: Any]
         defaults.register(defaults: defaultsDictionary)
         defaults.synchronize()
+        
+        
         
         return true
     }

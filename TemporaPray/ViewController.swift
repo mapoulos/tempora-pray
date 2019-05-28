@@ -13,15 +13,14 @@ class ViewController: UIViewController {
     //@IBOutlet var timerView: UIView!
     
     @IBOutlet var timerView: UIView!
-    
-    
     @IBOutlet weak var meditationButton: UIButton!
     @IBOutlet weak var timerLabel: UILabel!
-    let authorURL = "https://localhost:8080/authors"
+    
+    
     let defaults = UserDefaults()
     lazy var meditationTimer = PausableTimer(duration: 0, update: {}, onPause: {}, onResume: {}, onEnd: {})
     
-    var authorCatalog: [Author] = Array()
+    var authorCatalog: [Author] = []
     
     var currentAuthor: Author?
     var currentWork: Work?
@@ -35,46 +34,15 @@ class ViewController: UIViewController {
         return TimerSoundLibrary.getInstance()!
     }
     
-    private var authorList: [Author] = Array()
+//    private var authorList: [Author] = Array()
     private var loadingComplete = false
     
-    private func loadAuthorCatalog(urlString: String) {
-        
-        let url = URL(string: urlString)!
-        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
-            guard let data = data else { return }
-            do {
-                let response = try JSONDecoder().decode(WebResponse.self, from: data)
-                self.authorList = response.getAuthors()!
-                //by default select first author, first work, first section
-                self.currentAuthor = self.authorList.first
-                self.currentWork = self.currentAuthor?.works.first
-                self.currentSection = self.currentWork?.sections.first
-                let sectionURL = self.currentWork!.sections.first!.audioURL
-                let fileCache = FileCache.shared()
-                
-                fileCache.downloadFileFromURLAsync(urlString: self.currentSection!.audioURL, callback:
-                    { (success:Bool) in
-                        if success {
-                            self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: fileCache[sectionURL]!, filetype: "mp3", attribution: "")
-//                            self.initiateSoundEngine()
-                            self.loadingComplete = true
-                        }})
-                
-                os_log("Finished loading the authors' list from the web." )
-            } catch {
-                print(error)
-            }
-        
-            
-        }
-        task.resume()
-    }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "RootViewToSelectWork" {
             let authTableViewController = segue.destination as! AuthorTableViewController
-            authTableViewController.authors = self.authorList
+            authTableViewController.authors = self.authorCatalog
             self.navigationController?.isNavigationBarHidden = false;
         }
     }
@@ -92,10 +60,37 @@ class ViewController: UIViewController {
         self.updateUILabel()
     }
     
+    @IBOutlet weak var settingsButton: UIButton!
+    @IBOutlet weak var stopButton: UIButton!
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.isNavigationBarHidden = true
-        if currentAuthor != nil {
+        self.settingsButton.isHidden = true
+        self.stopButton.isHidden = true
+        
+        //grab data from catalog
+//        authorCatalog = Catalog.shared().authors
+        
+    
+        
+    
+        if currentAuthor == nil {
+            authorCatalog = Catalog.shared().authors
+            currentAuthor = authorCatalog.first
+            currentWork = currentAuthor?.works.first ?? nil
+            currentSection = currentWork?.sections.first ?? nil
+            let sectionURL = self.currentWork!.sections.first!.audioURL
+            let fileCache = FileCache.shared()
+            
+            fileCache.downloadFileFromURLAsync(urlString: self.currentSection!.audioURL, callback:
+                { (success:Bool) in
+                    if success {
+                        self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: fileCache[sectionURL]!, filetype: "mp3", attribution: "")
+                        self.loadingComplete = true
+                    }})
+            self.meditationButton.titleLabel!.text = "\(currentAuthor!.name), \(currentWork!.name) \(currentSection!.number)"
+        } else {
             loadingComplete = true
             FileCache.shared().downloadFileFromURLAsync(urlString: currentSection!.audioURL, callback: { (success:Bool) in
                     if success {
@@ -107,31 +102,44 @@ class ViewController: UIViewController {
 
             })
             self.meditationButton.titleLabel!.text = "\(currentAuthor!.name), \(currentWork!.name) \(currentSection!.number)"
-//            self.meditationButton.widthAnchor
         }
     }
     
+    func updateMeditationButton() {
+        self.meditationButton.setTitle("\(currentAuthor!.name), \(currentWork!.name) \(currentSection!.number)", for: UIControl.State.disabled)
+        self.meditationButton.setTitle("\(currentAuthor!.name), \(currentWork!.name) \(currentSection!.number)", for: UIControl.State.normal)
+    }
+    
+    
     override func viewDidLoad() {
         // Do any additional setup after loading the view.
-        loadAuthorCatalog(urlString: authorURL)
-        
+    
         self.updateUILabel()
         NotificationCenter.default.addObserver(self, selector: #selector(onDefaultsChange(_:)), name: UserDefaults.didChangeNotification, object: nil)
         
         super.viewDidLoad()
         meditationTimer.duration = UserDefaults().double(forKey: Preferences.SessionLength.rawValue)
         self.updateUILabel()
+        
+        
+        
         let upswipe = UISwipeGestureRecognizer.init(target: self, action: #selector(swipeHandler))
         upswipe.direction = .up
         
         let downswipe = UISwipeGestureRecognizer.init(target: self, action:#selector(swipeHandler))
+        let tap = UITapGestureRecognizer.init(target: self, action: #selector(tapHandler))
         downswipe.direction = .down
         timerView.addGestureRecognizer(upswipe)
         timerView.addGestureRecognizer(downswipe)
+        timerView.addGestureRecognizer(tap)
         
         
     }
-    
+    @objc func tapHandler(_obj : UITapGestureRecognizer) {
+        
+        settingsButton.isHidden.toggle()
+        stopButton.isHidden.toggle()
+    }
     @objc func swipeHandler(_ obj : UISwipeGestureRecognizer) {
         
         if (meditationTimer.isRunning == false && meditationTimer.started() == false) {
@@ -287,6 +295,8 @@ class ViewController: UIViewController {
             let defaults = UserDefaults()
             let duration = defaults.double(forKey: Preferences.SessionLength.rawValue)
             meditationButton.isEnabled = false
+            updateMeditationButton()
+            
             meditationTimer.duration = duration
             meditationTimer.onPause = {
                 self.engine.pause()

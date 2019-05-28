@@ -7,7 +7,83 @@
 //
 
 import Foundation
+import os
 
+
+extension URLSession {
+    func synchronousDataTask(url: URL) -> (Data?, URLResponse?, Error?) {
+        var data: Data?
+        var response: URLResponse?
+        var error: Error?
+        
+        let sem = DispatchSemaphore(value: 0)
+        
+        let dataTask = self.dataTask(with: url) {
+            data = $0
+            response = $1
+            error = $2
+            sem.signal()
+        }
+        dataTask.resume()
+        _ = sem.wait(timeout: .distantFuture)
+        return (data,response, error)
+    }
+}
+
+public class Catalog {
+    private static var catalogInstance: Catalog?
+    
+    var authors: [Author]
+    
+    private init() {
+        authors = []
+    }
+    
+    
+    
+    static func initializeCatalog(url: URL) -> Catalog {
+        catalogInstance = Catalog()
+        catalogInstance?.loadAuthorCatalog(with: url)
+        return catalogInstance!
+    }
+    
+    static func shared() -> Catalog {
+        return catalogInstance!
+    }
+    // syncronously load the catalog from a URL
+    private func loadAuthorCatalog(with url: URL) {
+        
+        let (data, response, error) = URLSession.shared.synchronousDataTask(url: url)
+        do {
+            let parsedResponse = try JSONDecoder().decode(WebResponse.self, from: data!)
+            self.authors = parsedResponse.getAuthors()!
+            os_log("Finished loading the authors' list from the web." )
+        } catch {
+            print(error)
+        }
+    }
+//        let task = URLSession.shared.synchronousDataTask(with: url) {(data, response, error) in
+//
+//            do {
+//                let response = try JSONDecoder().decode(WebResponse.self, from: data)
+//                self.authors = response.getAuthors()!
+        
+                //by default select first author, first work, first section
+//                self.currentAuthor = self.authorList.first
+//                self.currentWork = self.currentAuthor?.works.first
+//                self.currentSection = self.currentWork?.sections.first
+//                let sectionURL = self.currentWork!.sections.first!.audioURL
+//                let fileCache = FileCache.shared()
+//
+//                fileCache.downloadFileFromURLAsync(urlString: self.currentSection!.audioURL, callback:
+//                    { (success:Bool) in
+//                        if success {
+//                            self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: fileCache[sectionURL]!, filetype: "mp3", attribution: "")
+//                            self.loadingComplete = true
+//                        }})}
+    
+    
+}
 
 struct WebResponse : Codable {
     //  var authors: [Author] = Array()
