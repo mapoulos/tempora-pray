@@ -71,12 +71,8 @@ class ViewController: UIViewController {
         self.settingsButton.isHidden = true
         self.stopButton.isHidden = true
         
-        //grab data from catalog
-//        authorCatalog = Catalog.shared().authors
-        
     
-        
-    
+        // setup the present author, async download the current meditation file
         if currentAuthor == nil {
             authorCatalog = Catalog.shared().authors
             currentAuthor = authorCatalog.first ?? Author(name: "", works: [], info: "")
@@ -365,6 +361,7 @@ class ViewController: UIViewController {
                 self.meditationTimer.elapsedTime = 0
                 self.engine.stop()
                 self.meditationButton.isEnabled = true
+                self.moveSectionIndexRight()
 
             }
             
