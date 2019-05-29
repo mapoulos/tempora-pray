@@ -55,9 +55,17 @@ public class Catalog {
         
         let (data, response, error) = URLSession.shared.synchronousDataTask(url: url)
         do {
-            let parsedResponse = try JSONDecoder().decode(WebResponse.self, from: data!)
-            self.authors = parsedResponse.getAuthors()!
-            os_log("Finished loading the authors' list from the web." )
+            if (data == nil) {
+                //no response at all from server
+                os_log("problem connecting to the catalog server")
+            } else {
+                let parsedResponse = try JSONDecoder().decode(WebResponse.self, from: data!)
+                self.authors = parsedResponse.getAuthors()!
+                os_log("Finished loading the authors' list from the web." )
+               
+            }
+            
+            
         } catch {
             print(error)
         }

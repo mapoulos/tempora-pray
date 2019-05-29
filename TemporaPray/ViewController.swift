@@ -25,6 +25,8 @@ class ViewController: UIViewController {
     var currentAuthor: Author?
     var currentWork: Work?
     var currentSection: Section?
+    var sectionIndex = 0
+    
     var soundLibrary: TimerSoundLibrary {
         if(TimerSoundLibrary.getInstance() == nil) {
             let soundBundle = Bundle(path: Bundle.main.path(forResource: "Sounds", ofType: "bundle")!)
@@ -57,7 +59,7 @@ class ViewController: UIViewController {
         let defaults = UserDefaults()
         let dur = defaults.double(forKey: Preferences.SessionLength.rawValue)
         meditationTimer.duration = dur
-        self.updateUILabel()
+        self.updateDurationLabel()
     }
     
     @IBOutlet weak var settingsButton: UIButton!
@@ -77,19 +79,21 @@ class ViewController: UIViewController {
     
         if currentAuthor == nil {
             authorCatalog = Catalog.shared().authors
-            currentAuthor = authorCatalog.first
-            currentWork = currentAuthor?.works.first ?? nil
-            currentSection = currentWork?.sections.first ?? nil
-            let sectionURL = self.currentWork!.sections.first!.audioURL
+            currentAuthor = authorCatalog.first ?? Author(name: "", works: [], info: "")
+            currentWork = currentAuthor?.works.first ?? Work()
+            currentSection = currentWork?.sections.first ?? Section(number: "", text: "Select Work", audioURL: "")
+            let sectionURL = self.currentWork?.sections.first?.audioURL ?? ""
             let fileCache = FileCache.shared()
             
-            fileCache.downloadFileFromURLAsync(urlString: self.currentSection!.audioURL, callback:
-                { (success:Bool) in
-                    if success {
-                        self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: fileCache[sectionURL]!, filetype: "mp3", attribution: "")
-                        self.loadingComplete = true
-                    }})
-            self.meditationButton.titleLabel!.text = "\(currentAuthor!.name), \(currentWork!.name) \(currentSection!.number)"
+            if currentSection?.audioURL != "" {
+                fileCache.downloadFileFromURLAsync(urlString: self.currentSection!.audioURL, callback:
+                    { (success:Bool) in
+                        if success {
+                            self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: fileCache[sectionURL]!, filetype: "mp3", attribution: "")
+                            self.loadingComplete = true
+                        }})
+            }
+            self.updateMeditationButton()
         } else {
             loadingComplete = true
             FileCache.shared().downloadFileFromURLAsync(urlString: currentSection!.audioURL, callback: { (success:Bool) in
@@ -101,7 +105,8 @@ class ViewController: UIViewController {
                     }
 
             })
-            self.meditationButton.titleLabel!.text = "\(currentAuthor!.name), \(currentWork!.name) \(currentSection!.number)"
+            self.updateMeditationButton()
+            
         }
     }
     
@@ -113,25 +118,40 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         // Do any additional setup after loading the view.
-    
-        self.updateUILabel()
+        super.viewDidLoad()
+        
+        
+        //get notified when prefs change
         NotificationCenter.default.addObserver(self, selector: #selector(onDefaultsChange(_:)), name: UserDefaults.didChangeNotification, object: nil)
         
-        super.viewDidLoad()
+        //setup the meditation timer for the saved value, and update the duration label
         meditationTimer.duration = UserDefaults().double(forKey: Preferences.SessionLength.rawValue)
-        self.updateUILabel()
+        self.updateDurationLabel()
         
+        //add the swipes recognizers
+        func addGesturesRecognizers() {
+            let upswipe = UISwipeGestureRecognizer.init(target: self, action: #selector(swipeHandler))
+            upswipe.direction = .up
+            
+            let downswipe = UISwipeGestureRecognizer.init(target: self, action:#selector(swipeHandler))
+            downswipe.direction = .down
+            
+            let leftSwipe = UISwipeGestureRecognizer.init(target: self, action: #selector(swipeHandler))
+            leftSwipe.direction = .left
+            
+            let rightSwipe = UISwipeGestureRecognizer.init(target: self, action: #selector(swipeHandler))
+            rightSwipe.direction = .right
+            
+            let tap = UITapGestureRecognizer.init(target: self, action: #selector(tapHandler))
+            
+            timerView.addGestureRecognizer(upswipe)
+            timerView.addGestureRecognizer(downswipe)
+            timerView.addGestureRecognizer(leftSwipe)
+            timerView.addGestureRecognizer(rightSwipe)
+            timerView.addGestureRecognizer(tap)
+        }
         
-        
-        let upswipe = UISwipeGestureRecognizer.init(target: self, action: #selector(swipeHandler))
-        upswipe.direction = .up
-        
-        let downswipe = UISwipeGestureRecognizer.init(target: self, action:#selector(swipeHandler))
-        let tap = UITapGestureRecognizer.init(target: self, action: #selector(tapHandler))
-        downswipe.direction = .down
-        timerView.addGestureRecognizer(upswipe)
-        timerView.addGestureRecognizer(downswipe)
-        timerView.addGestureRecognizer(tap)
+        addGesturesRecognizers()
         
         
     }
@@ -140,8 +160,41 @@ class ViewController: UIViewController {
         settingsButton.isHidden.toggle()
         stopButton.isHidden.toggle()
     }
+    
+    func moveSectionIndexRight() {
+        if(sectionIndex >= currentWork!.sections.count-1) {
+            sectionIndex = 0
+        } else {
+            sectionIndex += 1
+        }
+        currentSection = currentWork!.sections[sectionIndex]
+        self.updateMeditationButton()
+    }
+    
+    func moveSectionIndexLeft() {
+        if(sectionIndex <= 0) {
+            sectionIndex = currentWork!.sections.count - 1
+        } else {
+            sectionIndex -= 1
+        }
+        currentSection = currentWork!.sections[sectionIndex]
+        self.updateMeditationButton()
+    }
+    
     @objc func swipeHandler(_ obj : UISwipeGestureRecognizer) {
+    
+        // handle left and right swipes
+        if obj.direction == .right {
+            moveSectionIndexLeft()
+            os_log("moved section index left")
+            return
+        } else if obj.direction == .left {
+            moveSectionIndexRight()
+            os_log("moved section index right")
+            return
+        }
         
+        // handle up and down swipes
         if (meditationTimer.isRunning == false && meditationTimer.started() == false) {
             let defaults = UserDefaults()
             let curSessionLength = defaults.double(forKey: Preferences.SessionLength.rawValue)
@@ -158,12 +211,12 @@ class ViewController: UIViewController {
                 }
                 defaults.synchronize()
                 os_log("decreased session length by 5 minutes")
+           
             default:
                 print("Unexpected swipe")
             }
         }
         
-        print("Swiping \(obj.direction)")
     }
     
     var engine = AVAudioEngine()
@@ -252,7 +305,7 @@ class ViewController: UIViewController {
         meditationPlayer.play()
     }
     
-    func updateUILabel() {
+    func updateDurationLabel() {
         let formatter = DateComponentsFormatter()
         formatter.unitsStyle = .positional
         formatter.allowedUnits = [.hour, .minute, .second]
@@ -281,7 +334,7 @@ class ViewController: UIViewController {
             meditationTimer.stop()
             self.meditationButton.isEnabled = true
             showPlayButton()
-            updateUILabel()
+            updateDurationLabel()
             engine.stop()
         }
     }
@@ -308,7 +361,7 @@ class ViewController: UIViewController {
             
             meditationTimer.onEnd = {
                self.showPlayButton()
-                self.updateUILabel()
+                self.updateDurationLabel()
                 self.meditationTimer.elapsedTime = 0
                 self.engine.stop()
                 self.meditationButton.isEnabled = true
@@ -316,13 +369,13 @@ class ViewController: UIViewController {
             }
             
             meditationTimer.update = {
-                self.updateUILabel()
+                self.updateDurationLabel()
             }
             
             
             if(loadingComplete) {
                 showPauseButton()
-                updateUILabel()
+                updateDurationLabel()
                 DispatchQueue.global(qos: .userInitiated).async {
                     self.initiateSoundEngine()
                     self.scheduleSounds()

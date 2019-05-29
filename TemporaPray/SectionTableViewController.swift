@@ -57,6 +57,7 @@ class SectionTableViewController: UITableViewController {
             rootViewController.currentAuthor = author
             rootViewController.currentWork = work
             rootViewController.currentSection = section
+            rootViewController.sectionIndex = sectionIndex
             
         }
     }
