@@ -54,10 +54,9 @@ class SectionTableViewController: UITableViewController {
             let indexPath = self.tableView.indexPathForSelectedRow!
             let sectionIndex = indexPath.row
             let section = work.sections[sectionIndex]
-            rootViewController.currentAuthor = author
-            rootViewController.currentWork = work
-            rootViewController.currentSection = section
+            rootViewController.currentMeditation = (author, work, section)
             rootViewController.sectionIndex = sectionIndex
+            Preferences.updateDefaults(authorName: author.name, workName: work.name, sectionName: section.number)
             
         }
     }

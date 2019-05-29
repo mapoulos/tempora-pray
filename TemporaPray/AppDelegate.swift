@@ -15,19 +15,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let authorURL = "https://localhost:8080/authors"
     
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        Catalog.initializeCatalog(url: URL(string: authorURL)!)
-        
+        let catalog = Catalog.initializeCatalog(url: URL(string: authorURL)!)
+        // set the defaults
+        let defaults = UserDefaults()
+        let defaultsDictionary = [Preferences.SessionLength.rawValue: 300,
+                                  Preferences.IntermittentBell.rawValue: 120, Preferences.currentAuthorName.rawValue: "",
+                                  Preferences.currentWorkName.rawValue: "",
+                                  Preferences.currentSectionName.rawValue: ""] as [String: Any]
+        defaults.register(defaults: defaultsDictionary)
+        let currentAuthor =  defaults.string(forKey: Preferences.currentAuthorName.rawValue)
+        if currentAuthor == "" && catalog.authors.count > 0 {
+            let author = catalog.authors.first ?? Author()
+            let work = author.works.first ?? Work()
+            let section = work.sections.first ?? Section()
+            
+            Preferences.updateDefaults(authorName: author.name, workName: work.name, sectionName: section.number)
+        }
+        defaults.synchronize()
+
         return true
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        // set the defaults
-        let defaults = UserDefaults()
-        let defaultsDictionary = [Preferences.SessionLength.rawValue: 300, Preferences.IntermittentBell.rawValue: 120, Preferences.TextID.rawValue: "evagrius.onprayer.1"] as [String: Any]
-        defaults.register(defaults: defaultsDictionary)
-        defaults.synchronize()
         
         
         

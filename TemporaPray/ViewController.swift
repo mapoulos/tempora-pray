@@ -22,9 +22,11 @@ class ViewController: UIViewController {
     
     var authorCatalog: [Author] = []
     
-    var currentAuthor: Author?
-    var currentWork: Work?
-    var currentSection: Section?
+    var currentMeditation : (author:Author, work:Work, section:Section) = (Author(), Work(), Section())
+    
+//    var currentMeditation.author: Author?
+//    var currentWork: Work?
+//    var currentSection: Section?
     var sectionIndex = 0
     
     var soundLibrary: TimerSoundLibrary {
@@ -73,42 +75,50 @@ class ViewController: UIViewController {
         
     
         // setup the present author, async download the current meditation file
-        if currentAuthor == nil {
+        if currentMeditation.author.name == "" {
             authorCatalog = Catalog.shared().authors
-            currentAuthor = authorCatalog.first ?? Author(name: "", works: [], info: "")
-            currentWork = currentAuthor?.works.first ?? Work()
-            currentSection = currentWork?.sections.first ?? Section(number: "", text: "Select Work", audioURL: "")
-            let sectionURL = self.currentWork?.sections.first?.audioURL ?? ""
+            
+            let defaults = UserDefaults()
+            let prefAuthorName = defaults.string(forKey: Preferences.currentAuthorName.rawValue)
+            let prefWorkName = defaults.string(forKey: Preferences.currentWorkName.rawValue)
+            let prefSectionName = defaults.string(forKey: Preferences.currentSectionName.rawValue)
+            
+            //set from defaults
+            currentMeditation.author = authorCatalog.first(where: {$0.name == prefAuthorName}) ?? authorCatalog.first!
+            currentMeditation.work = currentMeditation.author.works.first(where: {$0.name == prefWorkName}) ?? currentMeditation.author.works.first!
+            currentMeditation.section = currentMeditation.work.sections.first(where: {$0.number == prefSectionName}) ?? currentMeditation.work.sections.first!
+            let sectionURL = currentMeditation.section.audioURL
             let fileCache = FileCache.shared()
             
-            if currentSection?.audioURL != "" {
-                fileCache.downloadFileFromURLAsync(urlString: self.currentSection!.audioURL, callback:
+            if currentMeditation.section.audioURL != "" {
+                fileCache.downloadFileFromURLAsync(urlString: self.currentMeditation.section.audioURL, callback:
                     { (success:Bool) in
                         if success {
                             self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: fileCache[sectionURL]!, filetype: "mp3", attribution: "")
                             self.loadingComplete = true
                         }})
             }
+            
             self.updateMeditationButton()
         } else {
             loadingComplete = true
-            FileCache.shared().downloadFileFromURLAsync(urlString: currentSection!.audioURL, callback: { (success:Bool) in
+            FileCache.shared().downloadFileFromURLAsync(urlString: currentMeditation.section.audioURL, callback: { (success:Bool) in
                     if success {
                         let fileCache = FileCache.shared()
-                        let sectionURL = self.currentSection!.audioURL
+                        let sectionURL = self.currentMeditation.section.audioURL
                         self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: fileCache[sectionURL]!, filetype: "mp3", attribution: "")
                         
                     }
 
             })
             self.updateMeditationButton()
-            
         }
     }
     
     func updateMeditationButton() {
-        self.meditationButton.setTitle("\(currentAuthor!.name), \(currentWork!.name) \(currentSection!.number)", for: UIControl.State.disabled)
-        self.meditationButton.setTitle("\(currentAuthor!.name), \(currentWork!.name) \(currentSection!.number)", for: UIControl.State.normal)
+        Preferences.updateDefaults(currentMeditation)
+        self.meditationButton.setTitle("\(currentMeditation.author.name), \(currentMeditation.work.name) \(currentMeditation.section.number)", for: UIControl.State.disabled)
+        self.meditationButton.setTitle("\(currentMeditation.author.name), \(currentMeditation.work.name) \(currentMeditation.section.number)", for: UIControl.State.normal)
     }
     
     
@@ -158,22 +168,22 @@ class ViewController: UIViewController {
     }
     
     func moveSectionIndexRight() {
-        if(sectionIndex >= currentWork!.sections.count-1) {
+        if(sectionIndex >= currentMeditation.work.sections.count-1) {
             sectionIndex = 0
         } else {
             sectionIndex += 1
         }
-        currentSection = currentWork!.sections[sectionIndex]
+        currentMeditation.section = currentMeditation.work.sections[sectionIndex]
         self.updateMeditationButton()
     }
     
     func moveSectionIndexLeft() {
         if(sectionIndex <= 0) {
-            sectionIndex = currentWork!.sections.count - 1
+            sectionIndex = currentMeditation.work.sections.count - 1
         } else {
             sectionIndex -= 1
         }
-        currentSection = currentWork!.sections[sectionIndex]
+        currentMeditation.section = currentMeditation.work.sections[sectionIndex]
         self.updateMeditationButton()
     }
     
@@ -230,7 +240,7 @@ class ViewController: UIViewController {
     func initiateSoundEngine() {
         
         func loadMeditationBuffer() {
-            let url2 = soundLibrary[currentSection!.audioURL]!.fileURL
+            let url2 = soundLibrary[currentMeditation.section.audioURL]!.fileURL
             meditationFile = try! AVAudioFile(forReading: url2)
             meditationBuffer = AVAudioPCMBuffer(pcmFormat: meditationFile!.processingFormat, frameCapacity: UInt32(meditationFile?.length ?? 0))
             try! meditationFile!.read(into: meditationBuffer!)

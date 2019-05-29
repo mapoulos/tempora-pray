@@ -184,11 +184,11 @@ struct Section : Comparable, Codable {
     var audioURL: String = ""
     var number: String = ""
     
-    init(number: String, text: String, audioURL: String) {
-        self.text = text
-        self.number = number
-        self.audioURL = audioURL
-    }
+//    init(number: String, text: String, audioURL: String) {
+//        self.text = text
+//        self.number = number
+//        self.audioURL = audioURL
+//    }
     
     
     
