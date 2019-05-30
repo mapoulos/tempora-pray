@@ -70,27 +70,6 @@ public class Catalog {
             print(error)
         }
     }
-//        let task = URLSession.shared.synchronousDataTask(with: url) {(data, response, error) in
-//
-//            do {
-//                let response = try JSONDecoder().decode(WebResponse.self, from: data)
-//                self.authors = response.getAuthors()!
-        
-                //by default select first author, first work, first section
-//                self.currentAuthor = self.authorList.first
-//                self.currentWork = self.currentAuthor?.works.first
-//                self.currentSection = self.currentWork?.sections.first
-//                let sectionURL = self.currentWork!.sections.first!.audioURL
-//                let fileCache = FileCache.shared()
-//
-//                fileCache.downloadFileFromURLAsync(urlString: self.currentSection!.audioURL, callback:
-//                    { (success:Bool) in
-//                        if success {
-//                            self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: fileCache[sectionURL]!, filetype: "mp3", attribution: "")
-//                            self.loadingComplete = true
-//                        }})}
-    
-    
 }
 
 struct WebResponse : Codable {
