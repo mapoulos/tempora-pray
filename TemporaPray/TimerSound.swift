@@ -78,7 +78,7 @@ class TimerSound  {
     }
 }
 
-class TimerSoundLibrary {
+public class TimerSoundLibrary {
     
     
     var bundle: Bundle

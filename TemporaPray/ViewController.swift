@@ -48,6 +48,7 @@ class ViewController: UIViewController {
             let authTableViewController = segue.destination as! AuthorTableViewController
             authTableViewController.authors = self.authorCatalog
             self.navigationController?.isNavigationBarHidden = false;
+            self.loadingComplete = false
         }
     }
     
@@ -72,7 +73,7 @@ class ViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = true
         self.settingsButton.isHidden = true
         self.stopButton.isHidden = true
-        
+        let fileCache = FileCache.shared()
     
         // setup the present author, async download the current meditation file
         if currentMeditation.author.name == "" {
@@ -84,35 +85,30 @@ class ViewController: UIViewController {
             let prefSectionName = defaults.string(forKey: Preferences.currentSectionName.rawValue)
             
             //set from defaults
-            currentMeditation.author = authorCatalog.first(where: {$0.name == prefAuthorName}) ?? authorCatalog.first!
-            currentMeditation.work = currentMeditation.author.works.first(where: {$0.name == prefWorkName}) ?? currentMeditation.author.works.first!
-            currentMeditation.section = currentMeditation.work.sections.first(where: {$0.number == prefSectionName}) ?? currentMeditation.work.sections.first!
-            let sectionURL = currentMeditation.section.audioURL
-            let fileCache = FileCache.shared()
+            currentMeditation.author = authorCatalog.first(where: {$0.name == prefAuthorName}) ?? Author()
+            currentMeditation.work = currentMeditation.author.works.first(where: {$0.name == prefWorkName}) ?? Work()
+            currentMeditation.section = currentMeditation.work.sections.first(where: {$0.number == prefSectionName}) ?? Section()
+        
             
-            if currentMeditation.section.audioURL != "" {
-                fileCache.downloadFileFromURLAsync(urlString: self.currentMeditation.section.audioURL, callback:
-                    { (success:Bool) in
-                        if success {
-                            self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: fileCache[sectionURL]!, filetype: "mp3", attribution: "")
-                            self.loadingComplete = true
-                        }})
-            }
-            
-            self.updateMeditationButton()
-        } else {
-            loadingComplete = true
-            FileCache.shared().downloadFileFromURLAsync(urlString: currentMeditation.section.audioURL, callback: { (success:Bool) in
-                    if success {
-                        let fileCache = FileCache.shared()
-                        let sectionURL = self.currentMeditation.section.audioURL
-                        self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: fileCache[sectionURL]!, filetype: "mp3", attribution: "")
-                        
-                    }
-
-            })
-            self.updateMeditationButton()
         }
+        let sectionURL = currentMeditation.section.audioURL
+        if currentMeditation.section.audioURL != "" {
+            fileCache.downloadFileFromURLAsync(urlString: self.currentMeditation.section.audioURL, callback:
+                { (success:Bool) in
+                    if success {
+                        let localUrl = URL(string: fileCache[sectionURL]!)!
+                        self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: localUrl, filetype: "mp3", attribution: "")
+                        self.loadingComplete = true
+                    } else {
+                        //there was a problem loading the file
+//                        let alert = UIAlertController(title: "Error Downloading File", message: "There was a problem downloading the selected meditation.", preferredStyle:  .alert)
+//                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//                        self.present(alert, animated: true)
+                    }
+                    
+            })
+        }
+        self.updateMeditationButton()
     }
     
     func updateMeditationButton() {
@@ -240,6 +236,7 @@ class ViewController: UIViewController {
     func initiateSoundEngine() {
         
         func loadMeditationBuffer() {
+//            let path = soundLibrary[currentMeditation.section.audioURL]
             let url2 = soundLibrary[currentMeditation.section.audioURL]!.fileURL
             meditationFile = try! AVAudioFile(forReading: url2)
             meditationBuffer = AVAudioPCMBuffer(pcmFormat: meditationFile!.processingFormat, frameCapacity: UInt32(meditationFile?.length ?? 0))
@@ -348,7 +345,12 @@ class ViewController: UIViewController {
     
     
     @IBAction func playButtonPressed(_ sender: UIButton?) {
-        
+        if(!loadingComplete) {
+            let alert = UIAlertController(title: "Error Downloading File", message: "There was a problem downloading the selected meditation.", preferredStyle:  .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true)
+            return
+        }
         if(meditationTimer.started() == false) {
             
             let defaults = UserDefaults()
@@ -378,19 +380,16 @@ class ViewController: UIViewController {
             meditationTimer.update = {
                 self.updateDurationLabel()
             }
-            
-            
-            if(loadingComplete) {
-                showPauseButton()
-                updateDurationLabel()
-                DispatchQueue.global(qos: .userInitiated).async {
-                    self.initiateSoundEngine()
-                    self.scheduleSounds()
-                }
-                self.meditationTimer.start()
+  
+        
+            showPauseButton()
+            updateDurationLabel()
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.initiateSoundEngine()
+                self.scheduleSounds()
             }
+            self.meditationTimer.start()
     
-            
         } else {
             if(meditationTimer.isRunning == true) {
                 showPlayButton()
