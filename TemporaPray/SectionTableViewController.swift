@@ -44,6 +44,18 @@ class SectionTableViewController: UITableViewController {
 //        cell.backgroundColor = .black
         cell.sectionNumber.text = work.sections[indexPath.row].number
         cell.sectionText.text = work.sections[indexPath.row].text
+        
+        
+        //if downloaded, display an icon
+        
+        //if not download, put a button
+        let downloadButton = UIButton(type: .system)
+        downloadButton.backgroundColor = .white
+        downloadButton.setImage(UIImage(named: "Download_arrow"), for: [])
+        cell.uiView.addSubview(downloadButton)
+        
+//        cell.uiView.addSubview(downloadButton)
+        //if downloading, put an activity monitor there
 
         return cell
     }
@@ -112,4 +124,5 @@ class SectionTableViewController: UITableViewController {
 class SectionCell : UITableViewCell {
     @IBOutlet var sectionNumber : UILabel!
     @IBOutlet var sectionText : UILabel!
+    @IBOutlet var uiView : UIView!
 }

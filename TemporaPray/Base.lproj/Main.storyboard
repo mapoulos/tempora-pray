@@ -151,30 +151,40 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" misplaced="YES" text="1:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v5I-US-G2g">
-                                            <rect key="frame" x="16" y="10" width="21" height="23.5"/>
+                                            <rect key="frame" x="16" y="10" width="21" height="24"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="100" verticalHuggingPriority="100" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" text="If you want..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AQo-FW-5Ju">
-                                            <rect key="frame" x="45" y="11.5" width="259" height="21"/>
+                                            <rect key="frame" x="45" y="10.5" width="222" height="22.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p0V-E0-Dv5">
+                                            <rect key="frame" x="275" y="10.5" width="29" height="22.5"/>
+                                            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </view>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="AQo-FW-5Ju" secondAttribute="trailing" constant="16" id="EE7-VD-hib"/>
+                                        <constraint firstAttribute="trailing" secondItem="AQo-FW-5Ju" secondAttribute="trailing" constant="53" id="EE7-VD-hib"/>
+                                        <constraint firstItem="p0V-E0-Dv5" firstAttribute="centerY" secondItem="BeF-p8-wV2" secondAttribute="centerY" id="GJp-lE-3dv"/>
                                         <constraint firstItem="v5I-US-G2g" firstAttribute="leading" secondItem="BeF-p8-wV2" secondAttribute="leading" constant="16" id="XjO-rt-fMn"/>
                                         <constraint firstItem="AQo-FW-5Ju" firstAttribute="leading" secondItem="v5I-US-G2g" secondAttribute="leading" constant="29" id="Zqp-UY-p9n"/>
+                                        <constraint firstItem="p0V-E0-Dv5" firstAttribute="bottom" secondItem="AQo-FW-5Ju" secondAttribute="bottom" id="eoH-47-y8d"/>
                                         <constraint firstItem="AQo-FW-5Ju" firstAttribute="centerY" secondItem="BeF-p8-wV2" secondAttribute="centerY" id="fOO-H5-9JM"/>
                                         <constraint firstItem="v5I-US-G2g" firstAttribute="centerY" secondItem="BeF-p8-wV2" secondAttribute="centerY" id="jDH-6D-9Mp"/>
+                                        <constraint firstItem="p0V-E0-Dv5" firstAttribute="leading" secondItem="AQo-FW-5Ju" secondAttribute="trailing" constant="8" id="ne3-Kv-4DP"/>
+                                        <constraint firstAttribute="trailing" secondItem="p0V-E0-Dv5" secondAttribute="trailing" constant="16" id="tkL-CY-ZYw"/>
+                                        <constraint firstItem="p0V-E0-Dv5" firstAttribute="bottom" secondItem="BeF-p8-wV2" secondAttribute="bottomMargin" id="ty6-Vb-6s5"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <outlet property="sectionNumber" destination="v5I-US-G2g" id="wfg-aH-yS0"/>
                                     <outlet property="sectionText" destination="AQo-FW-5Ju" id="weP-XJ-Khd"/>
+                                    <outlet property="uiView" destination="p0V-E0-Dv5" id="LQh-ye-6T7"/>
                                     <segue destination="gdN-By-I7l" kind="unwind" identifier="SectionSelected" unwindAction="sectionSelectedWith_seg:" id="KlA-QN-HqR"/>
                                 </connections>
                             </tableViewCell>
@@ -184,7 +194,9 @@
                             <outlet property="delegate" destination="wTm-so-36I" id="iyM-Qj-Vtg"/>
                         </connections>
                     </tableView>
+                    <toolbarItems/>
                     <navigationItem key="navigationItem" title="Section" id="VC8-q3-4QH"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bPj-yo-pp7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="gdN-By-I7l" userLabel="Exit" sceneMemberID="exit"/>
