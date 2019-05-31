@@ -35,22 +35,22 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cfH-Kb-vGq">
-                                <rect key="frame" x="136" y="455" width="48" height="48"/>
+                                <rect key="frame" x="135" y="455" width="50" height="50"/>
                                 <state key="normal" image="Play_icon"/>
                                 <connections>
                                     <action selector="playButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ugi-MV-GZJ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qLk-98-MJW">
-                                <rect key="frame" x="43" y="455" width="48" height="48"/>
-                                <state key="normal" image="Settings_icon"/>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xKb-d3-wMS">
-                                <rect key="frame" x="236" y="455" width="48" height="48"/>
+                                <rect key="frame" x="234" y="453" width="50" height="50"/>
                                 <state key="normal" image="Stop_icon"/>
                                 <connections>
                                     <action selector="stopButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0dc-vp-NGF"/>
                                 </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qLk-98-MJW">
+                                <rect key="frame" x="42" y="460" width="40" height="40"/>
+                                <state key="normal" image="Settings_icon"/>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -60,10 +60,10 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="xKb-d3-wMS" secondAttribute="trailing" constant="36" id="8ZJ-U6-6yA"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="xKb-d3-wMS" secondAttribute="bottom" constant="65" id="BRp-r5-tWu"/>
                             <constraint firstItem="cWx-1p-4qu" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="I6x-N2-Jel"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="qLk-98-MJW" secondAttribute="bottom" constant="65" id="MhR-Lb-GCv"/>
                             <constraint firstItem="eVN-Ag-ced" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="XnR-lk-flR"/>
-                            <constraint firstItem="qLk-98-MJW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="43" id="Xqk-Kf-Ct1"/>
+                            <constraint firstItem="qLk-98-MJW" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="42" id="Xqk-Kf-Ct1"/>
                             <constraint firstItem="cfH-Kb-vGq" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="-113" id="gPU-gE-GkX"/>
+                            <constraint firstItem="qLk-98-MJW" firstAttribute="centerY" secondItem="cfH-Kb-vGq" secondAttribute="centerY" id="mUR-aw-NoW"/>
                             <constraint firstItem="eVN-Ag-ced" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="xde-FW-k6b"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -162,9 +162,8 @@
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p0V-E0-Dv5">
-                                            <rect key="frame" x="275" y="10.5" width="29" height="22.5"/>
-                                            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p0V-E0-Dv5">
+                                            <rect key="frame" x="275" y="10.5" width="32" height="26.5"/>
                                         </view>
                                     </subviews>
                                     <constraints>
@@ -195,7 +194,14 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Section" id="VC8-q3-4QH"/>
+                    <navigationItem key="navigationItem" title="Section" id="VC8-q3-4QH">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="Download_arrow" id="8Hn-1A-ysy">
+                            <inset key="imageInsets" minX="0.0" minY="-3" maxX="0.0" maxY="-8"/>
+                            <connections>
+                                <action selector="downloadButtonPressed:" destination="wTm-so-36I" id="L1a-ez-tTU"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bPj-yo-pp7" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -223,9 +229,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Play_icon" width="48" height="48"/>
-        <image name="Settings_icon" width="48" height="48"/>
-        <image name="Stop_icon" width="48" height="48"/>
+        <image name="Download_arrow" width="50" height="50"/>
+        <image name="Play_icon" width="50" height="50"/>
+        <image name="Settings_icon" width="50" height="50"/>
+        <image name="Stop_icon" width="50" height="50"/>
     </resources>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
 </document>

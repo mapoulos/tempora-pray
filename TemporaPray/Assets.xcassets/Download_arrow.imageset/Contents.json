@@ -2,17 +2,16 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "downloadArrow_32x32.png",
+      "filename" : "icons8-installing-updates-50.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "downloadArrow_64x64.png",
+      "filename" : "icons8-installing-updates-100.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "downloadArrow_96x96.png",
       "scale" : "3x"
     }
   ],

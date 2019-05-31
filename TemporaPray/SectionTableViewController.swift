@@ -13,9 +13,12 @@ class SectionTableViewController: UITableViewController {
     var author = Author()
     var work = Work()
     
+    var workSaved = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -50,9 +53,12 @@ class SectionTableViewController: UITableViewController {
         
         //if not download, put a button
         let downloadButton = UIButton(type: .system)
-        downloadButton.backgroundColor = .white
-        downloadButton.setImage(UIImage(named: "Download_arrow"), for: [])
-        cell.uiView.addSubview(downloadButton)
+        
+        
+        downloadButton.backgroundColor = .clear
+//        downloadButton.setImage(UIImage(named: "Download_arrow"), for: [])
+//        downloadButton.frame = CGRect(x: 0, y: 0, width: 32, height: 32)
+//        cell.uiView.addSubview(downloadButton)
         
 //        cell.uiView.addSubview(downloadButton)
         //if downloading, put an activity monitor there
@@ -99,7 +105,10 @@ class SectionTableViewController: UITableViewController {
 
     }
     */
-
+    @IBAction func downloadButtonPressed(_ sender: Any) {
+        
+    }
+    
     /*
     // Override to support conditional rearranging of the table view.
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
