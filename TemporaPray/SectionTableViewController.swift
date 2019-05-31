@@ -15,6 +15,16 @@ class SectionTableViewController: UITableViewController {
     
     var workSaved = false
     
+    func isWorkDownloaded(_ work: Work) -> Bool {
+        let cache = FileCache.shared()
+        for section in work.sections {
+            if !cache.containsSavedFile(remoteURL: section.audioURL) {
+                return false
+            }
+        }
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -129,6 +139,11 @@ class SectionTableViewController: UITableViewController {
 
 }
 
+
+//so what's the logic, I suppose:
+// - if downloaded, show checkmark up top
+// - if not, show icon for downloading
+// - if downloading, show progress icon
 
 class SectionCell : UITableViewCell {
     @IBOutlet var sectionNumber : UILabel!

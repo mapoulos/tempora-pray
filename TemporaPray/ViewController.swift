@@ -93,7 +93,7 @@ class ViewController: UIViewController {
         }
         let sectionURL = currentMeditation.section.audioURL
         if currentMeditation.section.audioURL != "" {
-            fileCache.downloadFileFromURLAsync(urlString: self.currentMeditation.section.audioURL, callback:
+            fileCache.saveFileToCache(urlString: self.currentMeditation.section.audioURL, callback:
                 { (success:Bool) in
                     if success {
                         let localUrl = URL(string: fileCache[sectionURL]!)!
@@ -171,7 +171,7 @@ class ViewController: UIViewController {
         }
         currentMeditation.section = currentMeditation.work.sections[sectionIndex]
         self.loadingComplete = false
-        FileCache.shared().downloadFileFromURLAsync(urlString: currentMeditation.section.audioURL) { (success) in
+        FileCache.shared().saveFileToCache(urlString: currentMeditation.section.audioURL) { (success) in
             if success {
                 let sectionURL = self.currentMeditation.section.audioURL
                 let localUrl = URL(string: FileCache.shared()[sectionURL]!)!
@@ -192,7 +192,7 @@ class ViewController: UIViewController {
         }
         currentMeditation.section = currentMeditation.work.sections[sectionIndex]
         self.loadingComplete = false
-        FileCache.shared().downloadFileFromURLAsync(urlString: currentMeditation.section.audioURL) { (success) in
+        FileCache.shared().saveFileToCache(urlString: currentMeditation.section.audioURL) { (success) in
             if success {
                 let sectionURL = self.currentMeditation.section.audioURL
                 let localUrl = URL(string: FileCache.shared()[sectionURL]!)!
