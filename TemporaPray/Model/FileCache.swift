@@ -93,14 +93,17 @@ public class FileCache : Codable {
                     self.updateManifest()
                     os_log("Downloaded file: %@", log: .default, type: .info, urlString)
                     callback( true)
+                    return
                 } catch let error {
                     os_log("Problem downloading file: %@", log: .default, type: .info, urlString)
                     print(error.localizedDescription)
                     callback(false)
+                    return
                 }
             }
 //            print(urlResponse)
             callback(false)
+            return
         }
         task.resume()
     }

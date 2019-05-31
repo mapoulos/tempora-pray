@@ -150,21 +150,32 @@
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="1:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v5I-US-G2g">
-                                            <rect key="frame" x="16" y="10" width="26" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" text="1:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v5I-US-G2g">
+                                            <rect key="frame" x="16" y="10" width="21" height="23.5"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="If you want..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AQo-FW-5Ju">
-                                            <rect key="frame" x="40" y="11.5" width="264" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="248" misplaced="YES" text="If you want..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AQo-FW-5Ju">
+                                            <rect key="frame" x="45" y="12" width="259" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="259" id="OoE-0J-9fE"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="v5I-US-G2g" firstAttribute="leading" secondItem="BeF-p8-wV2" secondAttribute="leading" constant="16" id="B1j-cH-cAi"/>
+                                        <constraint firstItem="AQo-FW-5Ju" firstAttribute="leading" secondItem="v5I-US-G2g" secondAttribute="trailing" constant="8" symbolic="YES" id="FQe-bn-ucy"/>
+                                        <constraint firstItem="AQo-FW-5Ju" firstAttribute="bottom" secondItem="BeF-p8-wV2" secondAttribute="bottomMargin" id="VdX-sh-18k"/>
+                                        <constraint firstItem="AQo-FW-5Ju" firstAttribute="centerY" secondItem="BeF-p8-wV2" secondAttribute="centerY" id="VrL-m0-B4z"/>
+                                        <constraint firstItem="AQo-FW-5Ju" firstAttribute="trailing" secondItem="BeF-p8-wV2" secondAttribute="trailingMargin" id="cCl-t4-wfU"/>
+                                        <constraint firstItem="v5I-US-G2g" firstAttribute="leading" secondItem="BeF-p8-wV2" secondAttribute="leadingMargin" id="d0G-dS-qs9"/>
+                                        <constraint firstItem="v5I-US-G2g" firstAttribute="centerY" secondItem="BeF-p8-wV2" secondAttribute="centerY" id="hd1-ja-gch"/>
+                                        <constraint firstItem="v5I-US-G2g" firstAttribute="top" secondItem="BeF-p8-wV2" secondAttribute="topMargin" constant="-1" id="zhl-M7-2pl"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>

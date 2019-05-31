@@ -88,7 +88,7 @@ class ViewController: UIViewController {
             currentMeditation.author = authorCatalog.first(where: {$0.name == prefAuthorName}) ?? Author()
             currentMeditation.work = currentMeditation.author.works.first(where: {$0.name == prefWorkName}) ?? Work()
             currentMeditation.section = currentMeditation.work.sections.first(where: {$0.number == prefSectionName}) ?? Section()
-        
+            sectionIndex = currentMeditation.work.sections.firstIndex(of: currentMeditation.section) ?? 0
             
         }
         let sectionURL = currentMeditation.section.audioURL
@@ -170,6 +170,17 @@ class ViewController: UIViewController {
             sectionIndex += 1
         }
         currentMeditation.section = currentMeditation.work.sections[sectionIndex]
+        self.loadingComplete = false
+        FileCache.shared().downloadFileFromURLAsync(urlString: currentMeditation.section.audioURL) { (success) in
+            if success {
+                let sectionURL = self.currentMeditation.section.audioURL
+                let localUrl = URL(string: FileCache.shared()[sectionURL]!)!
+                self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: localUrl, filetype: "mp3", attribution: "")
+                self.loadingComplete = true
+            } else {
+                self.loadingComplete = false
+            }
+        }
         self.updateMeditationButton()
     }
     
@@ -180,23 +191,25 @@ class ViewController: UIViewController {
             sectionIndex -= 1
         }
         currentMeditation.section = currentMeditation.work.sections[sectionIndex]
+        self.loadingComplete = false
+        FileCache.shared().downloadFileFromURLAsync(urlString: currentMeditation.section.audioURL) { (success) in
+            if success {
+                let sectionURL = self.currentMeditation.section.audioURL
+                let localUrl = URL(string: FileCache.shared()[sectionURL]!)!
+                self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: localUrl, filetype: "mp3", attribution: "")
+                self.loadingComplete = true
+            } else {
+                self.loadingComplete = false
+            }
+        }
         self.updateMeditationButton()
     }
     
     @objc func swipeHandler(_ obj : UISwipeGestureRecognizer) {
-    
-        // handle left and right swipes
-        if obj.direction == .right {
-            moveSectionIndexLeft()
-            os_log("moved section index left")
-            return
-        } else if obj.direction == .left {
-            moveSectionIndexRight()
-            os_log("moved section index right")
-            return
-        }
-        
-        // handle up and down swipes
+ 
+        //upswipes and downswipes adjust time
+        //left and right swipes adjust the current meditation
+        //these should only be adjustable while a meditation is not active
         if (meditationTimer.isRunning == false && meditationTimer.started() == false) {
             let defaults = UserDefaults()
             let curSessionLength = defaults.double(forKey: Preferences.SessionLength.rawValue)
@@ -213,7 +226,12 @@ class ViewController: UIViewController {
                 }
                 defaults.synchronize()
                 os_log("decreased session length by 5 minutes")
-           
+            case .left:
+                moveSectionIndexRight()
+                os_log("moved section index right")
+            case .right:
+                moveSectionIndexLeft()
+                os_log("moved section index left")
             default:
                 print("Unexpected swipe")
             }
@@ -236,11 +254,13 @@ class ViewController: UIViewController {
     func initiateSoundEngine() {
         
         func loadMeditationBuffer() {
-//            let path = soundLibrary[currentMeditation.section.audioURL]
-            let url2 = soundLibrary[currentMeditation.section.audioURL]!.fileURL
-            meditationFile = try! AVAudioFile(forReading: url2)
-            meditationBuffer = AVAudioPCMBuffer(pcmFormat: meditationFile!.processingFormat, frameCapacity: UInt32(meditationFile?.length ?? 0))
-            try! meditationFile!.read(into: meditationBuffer!)
+            if let url2 = soundLibrary[currentMeditation.section.audioURL]?.fileURL {
+                meditationFile = try! AVAudioFile(forReading: url2)
+                meditationBuffer = AVAudioPCMBuffer(pcmFormat: meditationFile!.processingFormat, frameCapacity: UInt32(meditationFile?.length ?? 0))
+                try! meditationFile!.read(into: meditationBuffer!)
+            } else {
+                os_log("there was a problem loaded the meditation buffer")
+            }
         }
         
         loadMeditationBuffer()
