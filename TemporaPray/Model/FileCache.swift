@@ -65,6 +65,7 @@ public class FileCache : Codable {
         
     }
    
+    
     func containsSavedFile(remoteURL : String) -> Bool{
         return savedFiles.contains(where: { (arg0) -> Bool in
             let (key, _) = arg0
@@ -160,9 +161,16 @@ public class FileCache : Codable {
         task.resume()
     }
     
-    
+    // return a url from the cache or the library
+    // check the library first, then the cache
+    // if file doesn't exist locally yet, return nil
     subscript(key: String) -> String? {
-        return  FileCache.cachePath.appendingPathComponent(cachedFiles[key]!).absoluteString
+        if let result = savedFiles[key] {
+            return FileCache.libraryPath.appendingPathComponent(result).absoluteString
+        } else if let result = cachedFiles[key] {
+            return  FileCache.cachePath.appendingPathComponent(result).absoluteString
+        }
+        return nil
     }
     
     static func shared() -> FileCache {

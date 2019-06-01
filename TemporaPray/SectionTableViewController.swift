@@ -15,6 +15,14 @@ class SectionTableViewController: UITableViewController {
     
     var workSaved = false
     
+    private enum WorkStatus  {
+        case downloading
+        case local
+        case server
+    }
+    
+    private var workStatus = WorkStatus.server
+    
     func isWorkDownloaded(_ work: Work) -> Bool {
         let cache = FileCache.shared()
         for section in work.sections {
@@ -35,6 +43,45 @@ class SectionTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
 //        self.tableView.register(SectionCell.self, forCellReuseIdentifier: cellID)
+    }
+    
+    
+    @IBAction func downloadButton(_ sender: UIBarButtonItem) {
+        if(workStatus == .server) {
+            var downloadTaskList = [String:Bool]()
+            for section in work.sections {
+                downloadTaskList[section.audioURL] = false
+                let remoteURL = section.audioURL
+                FileCache.shared().saveFileToCache(urlString: remoteURL, store: true) { (success) in
+                    if success {
+                        downloadTaskList.removeValue(forKey: section.audioURL)
+                        if downloadTaskList.isEmpty {
+                            self.workStatus = .local
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    @IBOutlet weak var downloadBarButton: UIBarButtonItem!
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        if(isWorkDownloaded(work)) {
+            workStatus = .local
+        }
+        
+        switch workStatus {
+        case .downloading:
+            self.downloadBarButton.isEnabled = false
+//            self.downloadBarButton.
+            //self.downloadBarButton.setBackgroundImage(<#T##backgroundImage: UIImage?##UIImage?#>, for: <#T##UIControl.State#>, barMetrics: <#T##UIBarMetrics#>)
+        case .local:
+            self.downloadBarButton.setBackgroundImage(UIImage(named: "Download_complete"), for: [], barMetrics: .default)
+        case .server:
+            self.downloadBarButton.setBackgroundImage(UIImage(named: "Download_arrow"), for: [], barMetrics: .default)
+        }
     }
 
     // MARK: - Table view data source

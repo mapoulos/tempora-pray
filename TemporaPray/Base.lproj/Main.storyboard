@@ -198,11 +198,14 @@
                         <barButtonItem key="rightBarButtonItem" title="Item" image="Download_arrow" id="8Hn-1A-ysy">
                             <inset key="imageInsets" minX="0.0" minY="-3" maxX="0.0" maxY="-8"/>
                             <connections>
-                                <action selector="downloadButtonPressed:" destination="wTm-so-36I" id="L1a-ez-tTU"/>
+                                <action selector="downloadButton:" destination="wTm-so-36I" id="5LI-Sn-QES"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="downloadBarButton" destination="8Hn-1A-ysy" id="ubf-wN-LKt"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bPj-yo-pp7" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="gdN-By-I7l" userLabel="Exit" sceneMemberID="exit"/>
