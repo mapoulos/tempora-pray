@@ -59,8 +59,8 @@ public class Catalog {
                 //no response at all from server
                 os_log("problem connecting to the catalog server")
             } else {
-                let parsedResponse = try JSONDecoder().decode(WebResponse.self, from: data!)
-                self.authors = parsedResponse.getAuthors()!
+                let parsedResponse = try JSONDecoder().decode([Author].self, from: data!)
+                self.authors = parsedResponse
                 os_log("Finished loading the authors' list from the web." )
                
             }
@@ -174,7 +174,7 @@ struct Section : Comparable, Codable {
     private enum CodingKeys: String, CodingKey {
         case text
         case number
-        case audioURL
+        case audioURL = "url"
     }
 }
 
