@@ -259,7 +259,7 @@ class ViewController: UIViewController {
                 meditationBuffer = AVAudioPCMBuffer(pcmFormat: meditationFile!.processingFormat, frameCapacity: UInt32(meditationFile?.length ?? 0))
                 try! meditationFile!.read(into: meditationBuffer!)
             } else {
-                os_log("there was a problem loaded the meditation buffer")
+                os_log("there was a problem loading the meditation buffer")
             }
         }
         
@@ -293,6 +293,8 @@ class ViewController: UIViewController {
         connectPlayersToMainMixer()
         
         engine.prepare()
+        
+        
         try! self.engine.start()
         
     }

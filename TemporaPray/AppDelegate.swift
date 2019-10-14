@@ -7,7 +7,8 @@
 //
 
 import UIKit
-
+import AVFoundation
+import os
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -33,6 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Preferences.updateDefaults(authorName: author.name, workName: work.name, sectionName: section.number)
         }
         defaults.synchronize()
+        
 
         return true
     }
@@ -40,8 +42,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
+        let sess = AVAudioSession.sharedInstance()
+        try? sess.setCategory(.playback, mode: .default, options: sess.categoryOptions.union(.mixWithOthers))
         
+        try? sess.setActive(true)
         
+        NotificationCenter.default.addObserver(forName: AVAudioSession.interruptionNotification, object: nil, queue: nil) { n in
+            let why = n.userInfo![AVAudioSessionInterruptionTypeKey] as! UInt
+            let type = AVAudioSession.InterruptionType(rawValue: why)!
+            switch type {
+            case .began:
+                os_log("interruption began")
+            case .ended:
+                try? AVAudioSession.sharedInstance().setActive(true)
+            @unknown default:
+                os_log("unknown default in notification")
+            }
+            
+        }
         
         return true
     }
