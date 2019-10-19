@@ -58,6 +58,14 @@ public class Catalog {
             if (data == nil) {
                 //no response at all from server
                 os_log("problem connecting to the catalog server")
+                os_log("Defaulting to built in catalog")
+                let catalogBundle = Bundle(path: Bundle.main.path(forResource: "Catalog", ofType: "bundle")!)!
+                let catalogData = try Data(contentsOf: catalogBundle.url(forResource: "catalog", withExtension: "json")!,  options: .mappedIfSafe)
+                
+                let parsedResponse = try  JSONDecoder().decode([Author].self, from: catalogData)
+                
+                self.authors = parsedResponse
+                
             } else {
                 let parsedResponse = try JSONDecoder().decode([Author].self, from: data!)
                 self.authors = parsedResponse
@@ -67,8 +75,18 @@ public class Catalog {
             
             
         } catch {
+            os_log("in catch")
+            let catalogBundle = Bundle(path: Bundle.main.path(forResource: "Catalog", ofType: "bundle")!)!
+            let catalogData = try! Data(contentsOf: catalogBundle.url(forResource: "catalog", withExtension: "json")!,  options: .mappedIfSafe)
+            
+            let parsedResponse = try! JSONDecoder().decode([Author].self, from: catalogData)
+            self.authors = parsedResponse
             print(error)
         }
+    }
+    
+    private func loadAuthorCatalog(bundle: Bundle) {
+        
     }
 }
 
