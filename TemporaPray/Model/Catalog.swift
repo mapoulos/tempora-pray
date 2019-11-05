@@ -53,6 +53,14 @@ public class Catalog {
     // syncronously load the catalog from a URL
     private func loadAuthorCatalog(with url: URL) {
         
+        func loadAuthorCatalogFromBundle() {
+            let catalogBundle = Bundle(path: Bundle.main.path(forResource: "Catalog", ofType: "bundle")!)!
+            let catalogData = try! Data(contentsOf: catalogBundle.url(forResource: "catalog", withExtension: "json")!,  options: .mappedIfSafe)
+            
+            let parsedResponse = try! JSONDecoder().decode([Author].self, from: catalogData)
+            self.authors = parsedResponse
+        }
+        
         let (data, response, error) = URLSession.shared.synchronousDataTask(url: url)
         do {
             if (data == nil) {
@@ -67,6 +75,7 @@ public class Catalog {
                 self.authors = parsedResponse
                 
             } else {
+                let str = String(decoding: data!, as: UTF8.self)
                 let parsedResponse = try JSONDecoder().decode([Author].self, from: data!)
                 self.authors = parsedResponse
                 os_log("Finished loading the authors' list from the web." )
@@ -74,14 +83,11 @@ public class Catalog {
             }
             
             
+        } catch Swift.DecodingError.typeMismatch(let type, let context) {
+            os_log("unexpected response from web server, resorting to built in catalog.")
+            loadAuthorCatalogFromBundle()
         } catch {
-            os_log("in catch")
-            let catalogBundle = Bundle(path: Bundle.main.path(forResource: "Catalog", ofType: "bundle")!)!
-            let catalogData = try! Data(contentsOf: catalogBundle.url(forResource: "catalog", withExtension: "json")!,  options: .mappedIfSafe)
-            
-            let parsedResponse = try! JSONDecoder().decode([Author].self, from: catalogData)
-            self.authors = parsedResponse
-            print(error)
+            loadAuthorCatalogFromBundle()
         }
     }
     
@@ -90,51 +96,6 @@ public class Catalog {
     }
 }
 
-struct WebResponse : Codable {
-    //  var authors: [Author] = Array()
-    fileprivate let _embedded : Embedded?
-    fileprivate let _links : Links?
-    fileprivate let page : Page?
-    
-    
-    func getAuthors() -> [Author]? {
-        return _embedded?.authors
-    }
-   
-    
-}
-
-fileprivate struct Embedded : Codable {
-    let authors : [Author]
-    let _links : Links?
-}
-
-fileprivate struct Page : Codable {
-    let size :Int?
-    let totalElements :Int?
-    let totalPages : Int?
-    let number : Int?
-}
-
-fileprivate struct Links : Codable {
-    let _self: LinkSelf?
-    let profile: Profile?
-    let author : String?
-    private enum CodingKeys: String, CodingKey {
-        case _self = "self"
-        case profile = "profile"
-        case author = "author"
-    }
-}
-
-fileprivate struct LinkSelf : Codable {
-    let href : String?
-    let templated : Bool?
-}
-
-fileprivate struct Profile : Codable {
-    let href : String?
-}
 struct Author : Comparable, Codable {
     static func < (lhs: Author, rhs: Author) -> Bool {
         return lhs.name < rhs.name

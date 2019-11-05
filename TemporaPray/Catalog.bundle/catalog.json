@@ -1,11 +1,11 @@
 [
   {
-    "name": "Evagrius Ponticus",
     "info": "Information Placeholder",
+    "name": "Evagrius Ponticus",
     "works": [
       {
-        "name": "On Prayer",
         "info": "Work Info Placeholder",
+        "name": "On Prayer",
         "sections": [
           {
             "number": "1",
@@ -161,6 +161,38 @@
             "number": "31",
             "text": "Do not go on praying that your own desires come to pass, since they do not cohere perfectly with the desire of God. Instead, pray persistently as you have learned, “thy will be done in me.” In every endeavor, pray this way, so that his will would be done. After all, he desires what is good and beneficial for your soul. But quite often you do not pursue this.",
             "url": "https://s3.amazonaws.com/tempora-pray-web-bucket/audio/evagrius.onprayer.031.mp3"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "info": "Information Placeholder",
+    "name": "St. Paul",
+    "works": [
+      {
+        "info": "Work Info Placeholder",
+        "name": "Philippians 4",
+        "sections": [
+          {
+            "number": "4",
+            "text": "Take delight in the Lord always; I will say it again: take delight!",
+            "url": "https://s3.amazonaws.com/tempora-pray-web-bucket/audio/paul.philippians.4.4.mp3"
+          },
+          {
+            "number": "5",
+            "text": "Show gentleness to all people. Our Lord is close by.",
+            "url": "https://s3.amazonaws.com/tempora-pray-web-bucket/audio/paul.philippians.4.5.mp3"
+          },
+          {
+            "number": "6",
+            "text": "Do not continue in anxious worrying. Instead, at all moments, present through prayer and petition your requests to God, and do this with gratitude. ",
+            "url": "https://s3.amazonaws.com/tempora-pray-web-bucket/audio/paul.philippians.4.6.mp3"
+          },
+          {
+            "number": "7",
+            "text": "Then God’s peace, which transcends every created mind mind, will protect, though Jesus Christ, your hearts and their thoughts. ",
+            "url": "https://s3.amazonaws.com/tempora-pray-web-bucket/audio/paul.philippians.4.7.mp3"
           }
         ]
       }
