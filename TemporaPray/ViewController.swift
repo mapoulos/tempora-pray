@@ -10,25 +10,28 @@ import UIKit
 import AVFoundation
 import os
 class ViewController: UIViewController {
-    //@IBOutlet var timerView: UIView!
     
+    // the TimerView is defined in the Main.storyboard
     @IBOutlet var timerView: UIView!
     @IBOutlet weak var meditationButton: UIButton!
     @IBOutlet weak var timerLabel: UILabel!
     
     
+    //for persisting the time preferences
     let defaults = UserDefaults()
+    
+    //the mediation timer
     lazy var meditationTimer = PausableTimer(duration: 0, update: {}, onPause: {}, onResume: {}, onEnd: {})
     
+    //the catalog of meditations
     var authorCatalog: [Author] = []
     
+    //object representation of current author, work, and section
     var currentMeditation : (author:Author, work:Work, section:Section) = (Author(), Work(), Section())
     
-//    var currentMeditation.author: Author?
-//    var currentWork: Work?
-//    var currentSection: Section?
-    var sectionIndex = 0
+    var sectionIndex = 0 //used to track which section is current and change to next on end
     
+    //the library of bell and medtati sounds
     var soundLibrary: TimerSoundLibrary {
         if(TimerSoundLibrary.getInstance() == nil) {
             let soundBundle = Bundle(path: Bundle.main.path(forResource: "Sounds", ofType: "bundle")!)
@@ -38,11 +41,11 @@ class ViewController: UIViewController {
         return TimerSoundLibrary.getInstance()!
     }
     
-//    private var authorList: [Author] = Array()
+    //tracking whether we are ready to start the meditation
     private var loadingComplete = false
     
     
-    
+    //for the segue to the Author View
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "RootViewToSelectWork" {
             let authTableViewController = segue.destination as! AuthorTableViewController
@@ -57,7 +60,7 @@ class ViewController: UIViewController {
     }
     
     
-    
+    //when settings change, update the label with the correct time
     @objc func onDefaultsChange(_ notification:Notification) {
         let defaults = UserDefaults()
         let dur = defaults.double(forKey: Preferences.SessionLength.rawValue)
@@ -65,18 +68,26 @@ class ViewController: UIViewController {
         self.updateDurationLabel()
     }
     
+    //buttons for settings and stop
     @IBOutlet weak var settingsButton: UIButton!
     @IBOutlet weak var stopButton: UIButton!
     
+    //called as the root view is getting ready to show
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        //we don't need the navagiation bar on the root view
         self.navigationController?.isNavigationBarHidden = true
+        
+        //by default, the settings and stop button are hiddent
         self.settingsButton.isHidden = true
         self.stopButton.isHidden = true
+        
+        //the cache for storing meditations locally.
         let fileCache = FileCache.shared()
     
         // setup the present author, async download the current meditation file
         if currentMeditation.author.name == "" {
+            //we haven't yet loaded a tmation
             authorCatalog = Catalog.shared().authors
             
             let defaults = UserDefaults()
@@ -84,31 +95,39 @@ class ViewController: UIViewController {
             let prefWorkName = defaults.string(forKey: Preferences.currentWorkName.rawValue)
             let prefSectionName = defaults.string(forKey: Preferences.currentSectionName.rawValue)
             
-            //set from defaults
+            //set meditation from the stored preferences
+            //TODO: we should be using primary keys, not names for these
             currentMeditation.author = authorCatalog.first(where: {$0.name == prefAuthorName}) ?? Author()
             currentMeditation.work = currentMeditation.author.works.first(where: {$0.name == prefWorkName}) ?? Work()
             currentMeditation.section = currentMeditation.work.sections.first(where: {$0.number == prefSectionName}) ?? Section()
             sectionIndex = currentMeditation.work.sections.firstIndex(of: currentMeditation.section) ?? 0
             
         }
-        let sectionURL = currentMeditation.section.audioURL
-        if currentMeditation.section.audioURL != "" {
-            fileCache.saveFileToCache(urlString: self.currentMeditation.section.audioURL, store: false, callback:
-                { (success:Bool) in
-                    if success {
-                        let localUrl = URL(string: fileCache[sectionURL]!)!
-                        self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: localUrl, filetype: "mp3", attribution: "")
-                        self.loadingComplete = true
-                    } else {
-                        //there was a problem loading the file
-//                        let alert = UIAlertController(title: "Error Downloading File", message: "There was a problem downloading the selected meditation.", preferredStyle:  .alert)
-//                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-//                        self.present(alert, animated: true)
-                    }
-                    
-            })
-        }
+        self.checkAndLoadCurrentMeditation()
         self.updateMeditationButton()
+    }
+    
+    private func checkAndLoadCurrentMeditation() {
+        let sectionURL = self.currentMeditation.section.audioURL
+        if currentMeditation.section.audioURL != "" {
+            let fileCache = FileCache.shared()
+                //TODO, promisify this
+                fileCache.saveFileToCache(urlString: sectionURL, store: false, callback:
+                    { (success:Bool) in
+                        if success {
+                            let localUrl = URL(string: fileCache[sectionURL]!)!
+                            self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: localUrl, filetype: "mp3", attribution: "")
+                            self.loadingComplete = true
+                        } else {
+                            os_log("There was a problem downloading the meditation.")
+                            //there was a problem loading the file
+    //                        let alert = UIAlertController(title: "Error Downloading File", message: "There was a problem downloading the selected meditation.", preferredStyle:  .alert)
+    //                        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+    //                        self.present(alert, animated: true)
+                        }
+                        
+                })
+            }
     }
     
     func updateMeditationButton() {
@@ -171,16 +190,7 @@ class ViewController: UIViewController {
         }
         currentMeditation.section = currentMeditation.work.sections[sectionIndex]
         self.loadingComplete = false
-        FileCache.shared().saveFileToCache(urlString: currentMeditation.section.audioURL, store: false) { (success) in
-            if success {
-                let sectionURL = self.currentMeditation.section.audioURL
-                let localUrl = URL(string: FileCache.shared()[sectionURL]!)!
-                self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: localUrl, filetype: "mp3", attribution: "")
-                self.loadingComplete = true
-            } else {
-                self.loadingComplete = false
-            }
-        }
+        self.checkAndLoadCurrentMeditation()
         self.updateMeditationButton()
     }
     
@@ -192,19 +202,11 @@ class ViewController: UIViewController {
         }
         currentMeditation.section = currentMeditation.work.sections[sectionIndex]
         self.loadingComplete = false
-        FileCache.shared().saveFileToCache(urlString: currentMeditation.section.audioURL, store: false) { (success) in
-            if success {
-                let sectionURL = self.currentMeditation.section.audioURL
-                let localUrl = URL(string: FileCache.shared()[sectionURL]!)!
-                self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: localUrl, filetype: "mp3", attribution: "")
-                self.loadingComplete = true
-            } else {
-                self.loadingComplete = false
-            }
-        }
+        self.checkAndLoadCurrentMeditation()
         self.updateMeditationButton()
     }
     
+    //handle swipes
     @objc func swipeHandler(_ obj : UISwipeGestureRecognizer) {
  
         //upswipes and downswipes adjust time
@@ -239,6 +241,7 @@ class ViewController: UIViewController {
         
     }
     
+    //Sound handling, this should probably be split out to a separated class
     var engine = AVAudioEngine()
     var bellFile: AVAudioFile?
     var meditationFile: AVAudioFile?
@@ -254,8 +257,8 @@ class ViewController: UIViewController {
     func initiateSoundEngine() {
         
         func loadMeditationBuffer() {
-            if let url2 = soundLibrary[currentMeditation.section.audioURL]?.fileURL {
-                meditationFile = try! AVAudioFile(forReading: url2)
+            if let curLocalURL = soundLibrary[currentMeditation.section.audioURL]?.fileURL {
+                meditationFile = try! AVAudioFile(forReading: curLocalURL)
                 meditationBuffer = AVAudioPCMBuffer(pcmFormat: meditationFile!.processingFormat, frameCapacity: UInt32(meditationFile?.length ?? 0))
                 try! meditationFile!.read(into: meditationBuffer!)
             } else {
@@ -266,9 +269,8 @@ class ViewController: UIViewController {
         loadMeditationBuffer()
         
         func loadBellBuffer() {
-            let url1 = soundLibrary["Ship Bell"]!.fileURL
-            bellFile = try! AVAudioFile(forReading: url1)
-            //             let manifestFile =
+            let bellURL = soundLibrary["Ship Bell"]!.fileURL
+            bellFile = try! AVAudioFile(forReading: bellURL)
             
             let format = bellFile!.processingFormat
             let length = bellFile!.length
@@ -277,7 +279,8 @@ class ViewController: UIViewController {
         }
         loadBellBuffer()
         
-        
+        //attach the nodes that play the bell
+        //and the meditation audio
         func attachPlayers() {
             engine.attach(bellPlayer)
             engine.attach(meditationPlayer)
@@ -285,6 +288,7 @@ class ViewController: UIViewController {
         
         attachPlayers()
         
+        //connect the plays to the main mixer node
         func connectPlayersToMainMixer() {
             engine.connect(bellPlayer, to: engine.mainMixerNode, format: bellFile!.processingFormat)
             engine.connect(meditationPlayer, to: engine.mainMixerNode, format: meditationFile!.processingFormat)
@@ -306,21 +310,35 @@ class ViewController: UIViewController {
         
     }
     
+    //funky math to get everything scheduled out the right time
+    //have to convert between time and frames
+    //we load the sounds into buffers, and then on the players
+    //we schedule the buffers to play like this:
+    // |---m---|s|--------------------silence---------------|---m---|s|
+    //
+    //where
+    // - | represents a bell sound,
+    // - m is the meditation audio
+    // - s is a short break of silence (default 1s)
     func scheduleSounds() {
         let outputFormat = self.bellPlayer.outputFormat(forBus: 0)
         let bellLength = Double(bellFile!.length) / outputFormat.sampleRate
         let meditationLength = Double(meditationFile!.length) / outputFormat.sampleRate
-        let sessionLength = meditationTimer.duration
-        let gapFollowingMeditation = 1.0
+        let sessionLength = meditationTimer.duration //length of a meditation session
+        let gapFollowingMeditation = 1.0 //gap after meditation before bell plays
         
+        //convert between a time in seconds and the corresponding audio frame
         func secToFrame(_ seconds : Double) -> AVAudioTime {
             return AVAudioTime.init(sampleTime: Int64(seconds*outputFormat.sampleRate), atRate: outputFormat.sampleRate)
         }
         
+        //the opening bell, meditation, bell sequence
         bellPlayer.scheduleBuffer(bellBuffer!, at: nil) {}
         meditationPlayer.scheduleBuffer(meditationBuffer!, at: secToFrame(bellLength)) {}
         bellPlayer.scheduleBuffer(bellBuffer!, at: secToFrame(bellLength+meditationLength+1)) {}
         
+        
+        //the closing bell, meditation, bell sequence
         bellPlayer.scheduleBuffer(bellBuffer!, at: secToFrame(sessionLength-bellLength*2-meditationLength-gapFollowingMeditation)) {}
         meditationPlayer.scheduleBuffer(meditationBuffer!, at: secToFrame(sessionLength-bellLength-meditationLength-gapFollowingMeditation)) {}
         bellPlayer.scheduleBuffer(bellBuffer!, at: secToFrame(sessionLength-bellLength)) {}
@@ -341,6 +359,7 @@ class ViewController: UIViewController {
     }
     
     
+    //logic for handling the switching between the play and the pause button
     @IBOutlet weak var playButton: UIButton!
     private func showPlayButton() {
         //change the playButton icon
@@ -365,9 +384,19 @@ class ViewController: UIViewController {
     }
     
     
-    
+    //The logic:
+    // - if we haven't loaded, then throw and alert
+    // - if the meditationTimer hasn't been started:
+    //      - setup the meditation timer
+    //      - change the play button to a pause button
+    //      - schedule the sounds (i.e. get the audio playing)
+    //      - start the timer
+    // - if the meditationTimer has been started:
+    //      - if currently active, pause it and show the play button
+    //      - if currently paused, resume the timer and show the pause button
     @IBAction func playButtonPressed(_ sender: UIButton?) {
         if(!loadingComplete) {
+            //if we haven't loaded yet, throw alert
             let alert = UIAlertController(title: "Error Downloading File", message: "There was a problem downloading the selected meditation.", preferredStyle:  .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true)
