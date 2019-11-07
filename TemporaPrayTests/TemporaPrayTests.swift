@@ -22,6 +22,8 @@ class TemporaPrayTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        let fileCache = FileCache.shared()
+        //TODO fill in test...
     }
 
     func testPerformanceExample() {
