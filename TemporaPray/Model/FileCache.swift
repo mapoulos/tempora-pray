@@ -154,7 +154,6 @@ public class FileCache : Codable {
                     return
                 }
             }
-//            print(urlResponse)
             callback(false)
             return
         }

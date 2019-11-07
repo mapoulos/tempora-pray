@@ -116,7 +116,7 @@ class ViewController: UIViewController {
                     { (success:Bool) in
                         if success {
                             let localUrl = URL(string: fileCache[sectionURL]!)!
-                            self.soundLibrary[sectionURL] = TimerSound(name: sectionURL, fileURL: localUrl, filetype: "mp3", attribution: "")
+                            self.soundLibrary[sectionURL] = TemporaSound(name: sectionURL, fileURL: localUrl, filetype: "mp3", attribution: "")
                             self.loadingComplete = true
                         } else {
                             os_log("There was a problem downloading the meditation.")

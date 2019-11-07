@@ -1,18 +1,21 @@
 //
-//  TimerSound.swift
+//  TemporaSound.swift
 //  Tempora
 //
 //  Created by Matthew Poulos on 4/24/19.
 //  Copyright © 2019 Equulus. All rights reserved.
 //
 
-//import Foundation
+
 import AVFoundation
 import UIKit
+import os
 
-//protocol
-
-class TimerSound  {
+/*
+    This class is used to load audio files
+    sounds
+ */
+class TemporaSound  {
     
     var name : String
     var fileURL: URL
@@ -26,55 +29,6 @@ class TimerSound  {
         self.fileURL = fileURL
         self.filetype = filetype
         self.attribution = attribution
-        do {
-            self.player = try AVAudioPlayer(contentsOf: fileURL, fileTypeHint: filetype)
-        } catch let error as NSError {
-            print(error.localizedDescription)
-        }
-    }
-    
-    
-//    private var audioSession: AVAudioSession
-    
-    func play() {
-        do {
-            
-            //player = try AVAudioPlayer(data: asset!.data, fileTypeHint: AVFileType.mp3.rawValue)
-            
-//            let player = AVAudioPlayerNode()
-//            let f = try! AVAudioFile(forReading: url)
-//            let mixer = self.engine.
-            player?.stop()
-            player?.prepareToPlay()
-            player!.play()
-            
-        } catch let error as NSError {
-            print(error.localizedDescription)
-        }
-    }
-    
-    func play(delay: TimeInterval) {
-        do {
-            
-            //player = try AVAudioPlayer(data: asset!.data, fileTypeHint: AVFileType.mp3.rawValue)
-            
-            player?.stop()
-            player?.prepareToPlay()
-            player!.play(atTime: player!.deviceCurrentTime + delay)
-            
-        } catch let error as NSError {
-            print(error.localizedDescription)
-        }
-    }
-    
-    func currentTime() -> TimeInterval {
-        player?.prepareToPlay()
-        return player!.currentTime
-    }
-    
-    func duration() -> TimeInterval {
-        player?.prepareToPlay()
-        return player!.duration
     }
 }
 
@@ -82,16 +36,16 @@ public class TimerSoundLibrary {
     
     
     var bundle: Bundle
-    var timerSoundsDictionary: [String:TimerSound]
+    var timerSoundsDictionary: [String:TemporaSound]
     static private var timerSoundLibrary: TimerSoundLibrary?
     
     private init(soundBundle: Bundle, manifestName: String, withExtension: String) {
         self.bundle = soundBundle
-        timerSoundsDictionary = Dictionary() as [String:TimerSound]
+        timerSoundsDictionary = Dictionary() as [String:TemporaSound]
         loadSoundBundle(fromBundle: soundBundle, manifestName: manifestName, ext: withExtension)
     }
     
-    subscript(key: String) -> TimerSound? {
+    subscript(key: String) -> TemporaSound? {
         get {
             return timerSoundsDictionary[key]
         }
@@ -115,12 +69,12 @@ public class TimerSoundLibrary {
                         let filetype = paramsDictionary["filetype"]
                         let fileURL = fromBundle.url(forResource: filename, withExtension: filetype)!
                         let attribution = paramsDictionary["attribution"]
-                        timerSoundsDictionary[timerSoundName] = TimerSound(name: timerSoundName, fileURL: fileURL, filetype: filetype!, attribution: attribution!)
+                        timerSoundsDictionary[timerSoundName] = TemporaSound(name: timerSoundName, fileURL: fileURL, filetype: filetype!, attribution: attribution!)
                     }
                 }
             }
         } catch {
-            print("error occurred")
+            os_log("Error occurred while loading sound bundle")
         }
     }
     
